@@ -16,20 +16,22 @@
  *
  */
 #include "lib/problema.hpp"
-#include "lib/genetics.hpp"
-#include "lib/baseClass.hpp"
+#include "lib/localSearches.hpp"
+#include "lib/generadores.hpp"  // Contiene los métodos generadores de soluciones
 
 using namespace std;
 
 int main (){
-    
+
     Problema* prob = new Problema();
     prob->ParseFile("data/BPP10.txt");
+    prob->BusquedasLocales();
 
-    cout << *GeneraSolucionPrimeroQuepa(prob->GetInstancia(1)) << endl;
-    cout << *GeneraSolucionPrimeroQuepa(prob->GetInstancia(1), true) << endl;
-    cout << *GeneraSolucionInicialRandom(prob->GetInstancia(1)) << endl;
+    //cout << *GeneraSolucionPrimeroQuepa(prob->GetInstancia(1)) << endl;
+    //cout << *GeneraSolucionPrimeroQuepa(prob->GetInstancia(1), true) << endl;
+    //cout << *GeneraSolucionInicialRandom(prob->GetInstancia(1)) << endl;
 
+/*
     // Creamos el problema de las transparencias:
     vector<uint16_t>* w = new vector<uint16_t>;
     w->push_back(3);
@@ -42,18 +44,20 @@ int main (){
     w->push_back(4);
     w->push_back(1);
     w->push_back(9);
-    
+
     Instancia* ins = new Instancia("Transparencias", 10, 10, 0, w);
     cout << *ins << endl;
     Instancia inn = *ins;
     cout << inn << endl;
 
+    LocalSearches* local = new LocalSearches(inn);
+    local->ILS();
+*/
+/*
     cout << *GeneraSolucionPrimeroQuepa(&inn) << endl;
     cout << *GeneraSolucionPrimeroQuepa(&inn, true) << endl;
     cout << *GeneraSolucionInicialRandom(&inn) << endl;
-
-    Derivada der(inn);
-    der.Print();
+*/
     return 0;
 }
 

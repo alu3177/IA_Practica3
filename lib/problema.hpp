@@ -1,7 +1,7 @@
 #include <fstream>
 #include <stdlib.h>
 
-#include "instancia.hpp"
+#include "localSearches.hpp"
 
 #ifndef PROBLEMA_H
 #define PROBLEMA_H
@@ -33,6 +33,21 @@ class Problema {
         // Métodos
         void ParseFile (const char* path); // Lee el fichero de entrada y carga los datos del problema
         //inline void AddInstancia(Instancia* i) { _instances->push_back(i); }
+
+
+        // LLAMADAS A LOS DIFERENTES ALGORITMOS (que están encapsulados en clases)
+        void BusquedasLocales(int32_t ins = -1){
+            // Ejecutar para todas las instancias cargadas
+            if (ins < 0){
+                for (uint16_t i = 0; i < _instances->size(); i++){
+                    LocalSearches* local = new LocalSearches(*_instances->at(i));
+                    local->ILS();
+                }
+            }else{
+                LocalSearches* local = new LocalSearches(*_instances->at(ins));
+                local->ILS();
+            }
+        }
 
 };
 

@@ -37,8 +37,8 @@ void Problema::ParseFile (const char* path){
                 }
                 _nInstancias = atoi(buff2);
 
-                cout << "_nInstancias = " << _nInstancias << endl;   // DEBUG
-                cout << "buff = " << buff << endl;   // DEBUG
+                //cout << "_nInstancias = " << _nInstancias << endl;   // DEBUG
+                //cout << "buff = " << buff << endl;   // DEBUG
 
                 haveInstances = true;
                 buff.clear();
@@ -51,7 +51,7 @@ void Problema::ParseFile (const char* path){
                     // Si ya estábamos leyendo otra instancia, la almacenamos antes de crear una nueva
                     _instances->push_back(ins);
                     haveData = false; // No disponemos de los datos de la nueva instancia
-                    cout << *ins << endl;   // DEBUG (mostramos la instancia generada)
+                    //cout << *ins << endl;   // DEBUG (mostramos la instancia generada)
                 }else
                     enInstancia = true;
                 // Creamos nueva instancia con el nombre almacenado en 'buff' menos el primer caracter (SEPARADOR)
@@ -108,6 +108,6 @@ void Problema::ParseFile (const char* path){
                 //cout << "w = " << atoi(buff2) << endl;  // DEBUG
             }
         }
-        cout << *ins << endl;   // DEBUG (mostramos la última instancia generada)
+        //cout << *ins << endl;   // DEBUG (mostramos la última instancia generada)
     }
 }

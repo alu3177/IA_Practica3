@@ -17,7 +17,7 @@ struct Contenedor{
 class Solucion{
     protected:
         vector<uint16_t> _vectorSolucion;
-        vector<uint16_t> _vectorEspacios;   // El espacio ocupado en cada contenedor (El contenedor 'i' tendrá '_vectorEspacios[i]' de espacio libre)
+        vector<uint16_t> _vectorEspacios;   // El espacio ocupado en cada contenedor (El contenedor 'i' tendrá '_vectorEspacios[i]' de espacio ocupado)
         uint16_t _nContenedores;
         uint16_t _espacioLibre;
 
@@ -97,24 +97,17 @@ bool FullyExplored (vector<uint16_t> &v){
 
 /* BUENAS SOLUCIONES */
 
+// Ordena de mayor a menor
 void BubbleSort(vector<uint16_t> &v){
-
-    // TODO : NO FUNCIONA
-
-    bool cambiado;
-    uint16_t n = v.size();
-    do{
-        cambiado = false;
-        for (uint16_t i = 1; i <=  n - 1; i++){
-            if (v[i-1] > v[i]){
-                uint16_t tmp = v[i];
-                v[i] = v[i-1];
-                v[i-1] = tmp;
-                cambiado = true;
+    for (uint16_t i = 1; i < v.size(); i++){
+        for (uint16_t j = 0; j < v.size() - 1; j++){
+            if (v[j] < v[j+1]){
+                uint16_t tmp = v[j];
+                v[j] = v[j+1];
+                v[j+1] = tmp;
             }
         }
-        n--;
-    }while(!cambiado);
+    }
 }
 
 // Instroduce cada objeto en el primer contenedor donde quepa
@@ -124,6 +117,11 @@ Solucion* GeneraSolucionPrimeroQuepa(Instancia* ins, bool ordena = false){
     vector<uint16_t> pesos = *ins->GetPesos();
     vector<uint16_t> v_solucion;
     bool insertado;  // Indica si se ha insertado el objeto 'i'
+
+    if (ordena){
+        BubbleSort(pesos);
+        ins->SetPesos(pesos); // Persistimos los cambios en la instacia, para mantener la coherencia
+    }
 
     for (int i = 0; i < pesos.size(); i++){
         insertado = false;

@@ -39,6 +39,11 @@ class Instancia {
         inline void SetNumObjetos (uint16_t n) { _nObjetos = n; }
         inline void SetMejorNumContenedores (uint16_t best) { _mejorNumCont = best; }
         inline void SetPesos(vector<uint16_t>* w) { _pesos = w; }
+        inline void SetPesos(vector<uint16_t> w) {
+            _pesos->clear();
+            for (uint16_t i = 0; i < w.size(); i++)
+                _pesos->push_back(w[i]);
+        }
 
         // SobreCarga de Operadores
         friend ostream& operator << (ostream &o, Instancia &ins){
@@ -51,6 +56,19 @@ class Instancia {
             }
             return o;
         }
+
+        friend bool operator == (Instancia &p, Instancia &p2){
+            return p2.GetName() == p.GetName() && p2.GetCapacidadC() == p.GetCapacidadC() && p2.GetMejorNumContenedores() == p.GetMejorNumContenedores() && p2.GetMejorNumContenedores() == p.GetMejorNumContenedores();
+        }
+
+        Instancia& operator = (Instancia &p){
+            this->_name = p.GetName();
+            this->_capacidadC = p.GetCapacidadC();
+            this->_nObjetos = p.GetNumObjetos();
+            this->_mejorNumCont = p.GetMejorNumContenedores();
+            this->_pesos = p.GetPesos();
+            return *this;
+        }   
 
 };
 

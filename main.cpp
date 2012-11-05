@@ -17,14 +17,18 @@
  */
 #include "lib/problema.hpp"
 #include "lib/genetics.hpp"
+#include "lib/baseClass.hpp"
 
 using namespace std;
 
 int main (){
-    /*
+    
     Problema* prob = new Problema();
     prob->ParseFile("data/BPP10.txt");
-    */
+
+    cout << *GeneraSolucionPrimeroQuepa(prob->GetInstancia(1)) << endl;
+    cout << *GeneraSolucionPrimeroQuepa(prob->GetInstancia(1), true) << endl;
+    cout << *GeneraSolucionInicialRandom(prob->GetInstancia(1)) << endl;
 
     // Creamos el problema de las transparencias:
     vector<uint16_t>* w = new vector<uint16_t>;
@@ -39,26 +43,17 @@ int main (){
     w->push_back(1);
     w->push_back(9);
     
-    for (int i = 0; i < w->size(); i++){
-        cout << w->at(i) << " ";
-    }
-    cout << endl;
-    
-    BubbleSort(*w);
-    
-    for (int i = 0; i < w->size(); i++){
-        cout << w->at(i) << " ";
-    }
-    cout << endl;
-    
-    
     Instancia* ins = new Instancia("Transparencias", 10, 10, 0, w);
     cout << *ins << endl;
+    Instancia inn = *ins;
+    cout << inn << endl;
 
-    cout << *GeneraSolucionPrimeroQuepa(ins) << endl;
-    cout << *GeneraSolucionInicialRandom(ins) << endl;
+    cout << *GeneraSolucionPrimeroQuepa(&inn) << endl;
+    cout << *GeneraSolucionPrimeroQuepa(&inn, true) << endl;
+    cout << *GeneraSolucionInicialRandom(&inn) << endl;
 
-    Genetics* gen = new Genetics(ins);
+    Derivada der(inn);
+    der.Print();
     return 0;
 }
 

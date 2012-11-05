@@ -28,6 +28,7 @@ class Problema {
         // Getters y Setters
 
         //inline void SetNumInstancias (uint16_t nI) { _nInstancias = nI; }
+        inline Instancia* GetInstancia(uint16_t pos) { return _instances->at(pos); }
 
         // Métodos
         void ParseFile (const char* path); // Lee el fichero de entrada y carga los datos del problema

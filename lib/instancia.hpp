@@ -33,6 +33,7 @@ class Instancia {
         inline uint16_t GetNumObjetos() { return _nObjetos; }
         inline uint16_t GetMejorNumContenedores() { return _mejorNumCont; }
         inline vector<uint16_t>* GetPesos() { return _pesos; }
+        inline uint16_t GetPeso(uint16_t i) { return _pesos->at(i); }
 
         inline void SetName (string n) { _name = n; }
         inline void SetCapacidadC (uint16_t c) { _capacidadC = c; }

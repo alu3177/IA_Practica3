@@ -51,7 +51,6 @@ class Solucion{
         void SetVectorEspacios(vector<uint16_t> &v) {
             _vectorEspacios.clear();
             for (uint16_t i = 0; i < v.size(); i++){
-                //cout << "Metiendo en vector " << v[i] << endl; // DEBUG
                 _vectorEspacios.push_back(v[i]);
             }
         }
@@ -62,8 +61,7 @@ class Solucion{
                 _vectorEspacios.push_back(v[i]->usedSpace);
             }
         }
-
-
+        
         inline void SetNumContenedores(uint16_t n) { _nContenedores = n; }
 
         // SobreCarga de Operadores

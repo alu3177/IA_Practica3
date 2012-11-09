@@ -9,7 +9,6 @@
 
 #define EXPLOREDWEIGHT 0    // Marca para indicar que se ha introducido dicho objeto en algun contenedor
 
-
 // Comprueba si 'v' ha sido completamente explorado (cada objeto asignado a un contenedor)
 bool FullyExplored (vector<uint16_t> &v){
     for (uint16_t i = 0; i < v.size(); i++){
@@ -18,8 +17,6 @@ bool FullyExplored (vector<uint16_t> &v){
     }
     return true;
 }
-
-/* BUENAS SOLUCIONES */
 
 // Ordena de mayor a menor
 void BubbleSort(vector<uint16_t> &v){
@@ -33,7 +30,20 @@ void BubbleSort(vector<uint16_t> &v){
         }
     }
 }
-
+/*
+// Devuelve la posicion del objeto con mayor v[i]
+uint16_t GetMayor (vector<uint16_t> &v){
+    uint16_t mayor = 0;
+    uint16_t result = 0;
+    for (uint16_t i = 0; i < v.size(); i++){
+        if (v[i] > mayor){
+            mayor = v[i];
+            result = i;
+        }
+    }
+    return result;
+}
+*/
 // Instroduce cada objeto en el primer contenedor donde quepa
 Solucion* GeneraSolucionPrimeroQuepa(Instancia* ins, bool ordena = false){
     vector<Contenedor* > contenedores;

@@ -27,14 +27,16 @@ int main (){
     prob->ParseFile("data/BPP10.txt");
     prob->BusquedasLocales();
 
+
     //cout << *GeneraSolucionPrimeroQuepa(prob->GetInstancia(1)) << endl;
     //cout << *GeneraSolucionPrimeroQuepa(prob->GetInstancia(1), true) << endl;
     //cout << *GeneraSolucionInicialRandom(prob->GetInstancia(1)) << endl;
 
 
+/*
     // Creamos el problema de las transparencias:
     vector<uint16_t>* w = new vector<uint16_t>;
-/*    
+
     w->push_back(3);
     w->push_back(6);
     w->push_back(2);

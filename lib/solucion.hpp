@@ -40,6 +40,8 @@ class Solucion{
         inline uint16_t GetEspacioLibre() { return _espacioLibre; }
 
         // SETTERS
+        inline void SetEspacioLibre(uint16_t s) { _espacioLibre = s; }
+
         void SetVectorSolucion(vector<uint16_t> &v) {
             _vectorSolucion.clear();
             for (uint16_t i = 0; i < v.size(); i++){
@@ -61,11 +63,12 @@ class Solucion{
                 _vectorEspacios.push_back(v[i]->usedSpace);
             }
         }
-        
+
         inline void SetNumContenedores(uint16_t n) { _nContenedores = n; }
 
         // SobreCarga de Operadores
         friend ostream& operator << (ostream &o, Solucion &sol){
+            /*
             o << "Vector Solucion: [ ";
             for (uint16_t i = 0; i < sol.GetVectorSolucion().size(); i++)
                 o << sol.GetVectorSolucion()[i] << " ";
@@ -74,9 +77,25 @@ class Solucion{
             for (uint16_t i = 0; i < sol.GetVectorEspacios().size(); i++)
                 o << sol.GetVectorEspacios()[i] << " ";
             o << "]" << endl;
+            */
             o << "Numero de contenedores: " << sol.GetNumContenedores() << endl;
             o << "Espacio Libre: " << sol.GetEspacioLibre() << endl;
             return o;
+        }
+
+        bool operator  < (Solucion &sol){
+            //cout << _espacioLibre << " < " << sol.GetEspacioLibre() << endl; // DEBUG
+            return ( (_espacioLibre < sol.GetEspacioLibre()) );
+        }
+
+        bool operator  <= (Solucion &sol){
+            //cout << _espacioLibre << " < " << sol.GetEspacioLibre() << endl; // DEBUG
+            return ( (_espacioLibre <= sol.GetEspacioLibre()) );
+        }
+
+        int operator  - (Solucion &sol){
+            //cout << _nContenedores << " - " <<  sol.GetNumContenedores() << endl;  // DEBUG
+            return ( (_nContenedores - sol.GetNumContenedores()) );
         }
 };
 #endif

@@ -45,7 +45,7 @@ uint16_t GetMayor (vector<uint16_t> &v){
 }
 */
 // Instroduce cada objeto en el primer contenedor donde quepa
-Solucion* GeneraSolucionPrimeroQuepa(Instancia* ins, bool ordena = false){
+Solucion* GeneraSolucionPrimeroQuepa(Instancia* ins, bool ordena){
     vector<Contenedor* > contenedores;
     Contenedor* cont;
     vector<uint16_t> pesos = *ins->GetPesos();

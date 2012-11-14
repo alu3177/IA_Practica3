@@ -36,16 +36,30 @@ class Problema {
 
 
         // LLAMADAS A LOS DIFERENTES ALGORITMOS (que están encapsulados en clases)
+        // 'ins' permite ejecutar los algoritmos para una sola instancia.
         void BusquedasLocales(int32_t ins = -1){
             // Ejecutar para todas las instancias cargadas
             if (ins < 0){
-                for (uint16_t i = 0; i < _instances->size(); i++){
-                    LocalSearches* local = new LocalSearches(*_instances->at(i));
-                    local->ILS();
+                //cout << "Numero de instancias: " << _nInstancias << endl;     // DEBUG
+                LocalSearches* local;
+                Solucion* solucion;
+                for (uint16_t i = 0; i < _nInstancias; i++){
+                    cout << "Instancia " << i << "          (" << _instances->at(i)->GetMejorNumContenedores() << ")" << endl;
+                    local = new LocalSearches(*_instances->at(i));
+                    //solucion = local->ILS();
+                    //cout << "   ILS 1: " << endl << *solucion;
+
+                    //solucion = local->ILS2();
+                    //cout << "   ILS 2: " << endl << *solucion;
+
+                    solucion = local->SA();
+                    cout << "   SA 1: " << endl << *solucion << endl;
+
                 }
             }else{
                 LocalSearches* local = new LocalSearches(*_instances->at(ins));
-                local->ILS();
+                Solucion* solucion = local->ILS();
+                cout << "Instancia " << ins << ", solución: " << endl << solucion << endl;
             }
         }
 

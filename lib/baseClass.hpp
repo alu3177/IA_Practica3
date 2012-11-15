@@ -14,17 +14,6 @@ class BaseClass{
 
     protected:
         Instancia _instance;
-/*
-        Solucion* GeneraMejorVecina (Solucion* sIn){
-            cout << GetMayor(*_instance.GetPesos()) << endl;
-            for (uint16_t i = 0; i < sIn->GetVectorEspacios().size(); i++){
-                uint16_t pesado = GetMayor(*_instance.GetPesos());
-                if ((sIn->GetVectorEspacios()[i] + _instance.GetPeso(pesado)) <= _instance.GetCapacidadC()){
-                    cout << "Moviendo objeto " << pesado << "(" << _instance.GetPeso(pesado) << ") de " << sIn->GetVectorSolucion()[pesado] << " a " << i << endl; // DEBUG
-                }
-            }
-        }
-*/
 
 
         // Borra el contenedor 'pos' del vector de Espacios 'vEsp' y
@@ -98,23 +87,38 @@ class BaseClass{
                         //cout << "[" << i <<  "]libre " << j << " : " << libre << endl;
                         if (_instance.GetPeso(i) < libre){ // ¿Cabe?
                             //cout << "Moviendo objeto " << i << "(" << _instance.GetPeso(i) << ") de " << sIn->GetVectorSolucion()[i] << " a " << j << endl; // DEBUG
-                            /*
+
                             if (libre - _instance.GetPeso(i) < mejor){  // Si deja menos espacio libre que el anterior mejor resultado...
                                 mejor = libre - _instance.GetPeso(i);
                                 bestCont = j;
                             }
-                            */
-                            result->push_back(MoverMenosEspacio(sIn, i, j));  // Insertamos 'i' en 'bestCont' (j)
+
+                            //result->push_back(MoverMenosEspacio(sIn, i, j));  // Insertamos 'i' en 'bestCont' (j)
                         }
                     }
                 }
-                //if ((bestCont > 0) && (mejor != _instance.GetCapacidadC()))
-                //    result->push_back(MoverMenosEspacio(sIn, i, bestCont));  // Insertamos 'i' en 'bestCont'
+                if ((bestCont > 0) && (mejor != _instance.GetCapacidadC()))
+                    result->push_back(MoverMenosEspacio(sIn, i, bestCont));  // Insertamos 'i' en 'bestCont'
             }
             //cout << "[FIN]  GetVecinasMenosEspacio" << endl; // DEBUG
             return result;
         }
 
+        // Devuelve la mejor solucion vecina genrada
+        Solucion* GeneraMejorVecina (Solucion* sIn){
+            vector<Solucion* > vecinas = *GetVecinasMenosEspacio(sIn);
+            Solucion* bestSol = sIn;
+
+            for (uint16_t i = 0; i < vecinas.size(); i++){
+                if (*vecinas[i] < *bestSol){
+                    bestSol = vecinas[i];
+                }
+            }
+
+            return bestSol;
+
+        }
+/*
         // Devuelve una solucion vecina escogida al azar entre las posibles
         Solucion* GetVecinaRandom(Solucion* sIn){
             srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
@@ -124,6 +128,38 @@ class BaseClass{
             if (vecinas.size() > 0)
                 return vecinas[rand() % vecinas.size()];
             return sIn;
+        }
+*/
+        // Devuelve una solucion vecina (a profundidad k) escogida al azar entre las posibles
+        Solucion* GetVecinaRandom(Solucion* sIn, uint16_t k = 1){
+            Solucion* result = sIn;
+            if (k >= 1){
+                uint16_t i = 0;
+                srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
+                while (i < k){
+                    //cout << i << " Solucion" << endl; // DEBUG
+                    vector<Solucion* >* vecinas = GetVecinasMenosEspacio(result);
+                    if (vecinas->size() > 0){
+                        result = vecinas->at(rand() % vecinas->size());
+                    }
+                    i++;
+                }
+            }
+            return result;
+        }
+
+        // Realiza una busqueda voraz
+        Solucion* Greedy(Solucion* &sIn){
+            Solucion* actual = sIn;
+            Solucion* vecina = actual;
+
+            while (1){
+                vecina = GeneraMejorVecina(actual);
+                if (*vecina < *actual)
+                    actual = vecina;
+                else
+                    return actual;
+            }
         }
 
 };

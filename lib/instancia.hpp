@@ -8,6 +8,14 @@ using namespace std;
 #ifndef INSTANCIA_H
 #define INSTANCIA_H
 
+// TODO: Mover los colores a otro sitio
+#define C_DEFAULT   "\033[0;m"
+#define C_RED       "\033[0;31m"
+#define C_GREEN     "\033[0;32m"
+#define C_CYAN      "\033[0;36m"
+#define C_BRED       "\033[1;31m"  // BOLD
+#define C_BGREEN     "\033[1;32m"   // BOLD
+
 class Instancia {
     protected:
         string _name;            // Nombre de la instancia
@@ -48,13 +56,17 @@ class Instancia {
 
         // SobreCarga de Operadores
         friend ostream& operator << (ostream &o, Instancia &ins){
-            o << "Instancia:                     " << ins.GetName() << endl;
+            o << "Instancia:                     " << C_BGREEN << ins.GetName() << C_DEFAULT << endl;
             o << "Capacidad de los contenedores: " << ins.GetCapacidadC() << endl;
             o << "Número de objetos:             " << ins.GetNumObjetos() << endl;
-            o << "Mejor número de contenedores:  " << ins.GetMejorNumContenedores() << endl;
+            o << "Mejor número de contenedores:  " << C_GREEN << ins.GetMejorNumContenedores() << C_DEFAULT << endl;
+            /*
             for (uint16_t i = 0; i < ins.GetPesos()->size(); i++){
-                o << "[" << i << "] " << ins.GetPesos()->at(i) << endl;
+                o << "[" << i << "]" << C_CYAN << ins.GetPesos()->at(i) << C_DEFAULT;
+                if (i < ins.GetPesos()->size() - 1)
+                    o << ", ";
             }
+            */
             return o;
         }
 
@@ -69,7 +81,7 @@ class Instancia {
             this->_mejorNumCont = p.GetMejorNumContenedores();
             this->_pesos = p.GetPesos();
             return *this;
-        }   
+        }
 
 };
 

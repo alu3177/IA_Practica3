@@ -1,6 +1,7 @@
 #ifndef SOLUCION_H
 #define SOLUCION_H
 
+
 struct Contenedor{
     uint16_t id;    // ID del contendor
     uint16_t c;
@@ -78,8 +79,8 @@ class Solucion{
                 o << sol.GetVectorEspacios()[i] << " ";
             o << "]" << endl;
             */
-            o << "Numero de contenedores: " << sol.GetNumContenedores() << endl;
-            o << "Espacio Libre: " << sol.GetEspacioLibre() << endl;
+            o << "Numero de contenedores: " << C_BRED << sol.GetNumContenedores() << endl;
+            o << C_DEFAULT << "Espacio Libre: " << C_BRED << sol.GetEspacioLibre() << C_DEFAULT << endl;
             return o;
         }
 

@@ -44,16 +44,24 @@ class Problema {
                 LocalSearches* local;
                 Solucion* solucion;
                 for (uint16_t i = 0; i < _nInstancias; i++){
-                    cout << "Instancia " << i << "          (" << _instances->at(i)->GetMejorNumContenedores() << ")" << endl;
+                    //cout << "Instancia " << i << "          (" << C_GREEN << _instances->at(i)->GetMejorNumContenedores() << C_DEFAULT << ")" << endl;
+                    cout << *_instances->at(i) << endl;
                     local = new LocalSearches(*_instances->at(i));
-                    //solucion = local->ILS();
-                    //cout << "   ILS 1: " << endl << *solucion;
 
-                    //solucion = local->ILS2();
-                    //cout << "   ILS 2: " << endl << *solucion;
+                    solucion = local->ILS();
+                    cout << "-- ILS 1: " << endl << *solucion;
+
+                    solucion = local->ILS2();
+                    cout << "-- ILS 2: " << endl << *solucion;
 
                     solucion = local->SA();
-                    cout << "   SA 1: " << endl << *solucion << endl;
+                    cout << "-- SA 1: " << endl << *solucion;
+
+                    solucion = local->SA2();
+                    cout << "-- SA 2: " << endl << *solucion;
+
+                    solucion = local->VNS();
+                    cout << "-- VNS 1: " << endl << *solucion << endl;
 
                 }
             }else{

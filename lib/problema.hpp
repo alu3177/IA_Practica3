@@ -48,20 +48,29 @@ class Problema {
                     cout << *_instances->at(i) << endl;
                     local = new LocalSearches(*_instances->at(i));
 
+                    cout << "-- ILS 1: " << endl;
                     solucion = local->ILS();
-                    cout << "-- ILS 1: " << endl << *solucion;
+                    cout << *solucion;
 
+                    cout << "-- ILS 2: " << endl;
                     solucion = local->ILS2();
-                    cout << "-- ILS 2: " << endl << *solucion;
+                    cout << *solucion;
 
+                    cout << "-- SA 1: " << endl;
                     solucion = local->SA();
-                    cout << "-- SA 1: " << endl << *solucion;
+                    cout << *solucion;
 
+                    cout << "-- SA 2: " << endl;
                     solucion = local->SA2();
-                    cout << "-- SA 2: " << endl << *solucion;
+                    cout << *solucion;
 
+                    cout << "-- VNS 1: " << endl;
                     solucion = local->VNS();
-                    cout << "-- VNS 1: " << endl << *solucion << endl;
+                    cout << *solucion;
+
+                    cout << "-- TS 1: " << endl;
+                    solucion = local->TS(25);
+                    cout << *solucion << endl;
 
                 }
             }else{

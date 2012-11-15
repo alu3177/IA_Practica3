@@ -207,6 +207,38 @@ class LocalSearches : public BaseClass {
         }
 
 
+        void ActualizaTabu (vector<Solucion* > &vin, Solucion* nSol, uint16_t tMax = 5){
+            vin.push_back(nSol);
+            if (vin.size() > tMax)
+                vin.erase(vin.begin());
+        }
+
+        Solucion* TS(uint16_t tMax = 5){
+            Solucion* actual = GeneraSolucionInicialRandom(&_instance);
+            //Solucion* actual = GeneraSolucionPrimeroQuepa(&_instance, true);
+            Solucion* mejorSol = actual;
+            Solucion* vecina;
+            vector<Solucion* > tabu;
+            //bool seguir = true; // TODO: Poner condicion de parada de verdad
+            uint16_t iter = 0;
+
+            while (iter < 150){
+                actual = GeneraMejorVecina(actual, tabu);
+                //cout << "Fin While 1" << endl; // DEBUG
+                //cout << *actual << " < " << *mejorSol << endl; // DEBUG
+                if (*actual < *mejorSol){
+                    mejorSol = actual;
+                    cout << C_CYAN << "      MEJORA" << C_DEFAULT << endl; // DEBUG
+                }
+                //cout << "Fin IF" << endl; // DEBUG
+                ActualizaTabu(tabu, actual, tMax);
+                //cout << "Fin Update Tabu" << endl; // DEBUG
+                iter++;
+
+                //cout << "ITER++" << endl; // DEBUG
+            }
+            return mejorSol;
+        }
 };
 
 #endif

@@ -118,6 +118,39 @@ class BaseClass{
             return bestSol;
 
         }
+
+        bool InVector (vector<Solucion* > &vin, Solucion* sol){
+            for (uint16_t i = 0; i < vin.size(); i++){
+                if (*vin[i] == *sol){
+                    //cout << *vin[i] << " == " << *sol << endl; // DEBUG
+                    //cout << C_CYAN << "     IGUALL !!" << C_DEFAULT << endl; // DEBUG
+                    return true;
+                }
+            }
+            //cout << "No estaba ..." << endl; // DEBUG
+            return false;
+        }
+
+        // Devuelve la mejor solucion vecina genrada teniendo en cuenta la lista 'tabu'
+        Solucion* GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu){
+            vector<Solucion* > vecinas = *GetVecinasMenosEspacio(sIn);
+            Solucion* bestSol = sIn;
+
+            for (uint16_t i = 0; i < vecinas.size(); i++){
+                if (*vecinas[i] < *bestSol){
+                    //cout << "MejorVecina, Mejora" << endl; // DEBUG
+                    if (!InVector(tabu, vecinas[i])){
+                        bestSol = vecinas[i];
+                        //cout << "Cojo uno" << endl; // DEBUG
+                    }
+                    //else
+                        //cout << "Descarto" << endl; // DEBUG
+                }
+            }
+
+            return bestSol;
+
+        }
 /*
         // Devuelve una solucion vecina escogida al azar entre las posibles
         Solucion* GetVecinaRandom(Solucion* sIn){

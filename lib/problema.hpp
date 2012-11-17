@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "localSearches.hpp"
+#include "constructivas.hpp"
 
 #ifndef PROBLEMA_H
 #define PROBLEMA_H
@@ -77,6 +78,30 @@ class Problema {
                 LocalSearches* local = new LocalSearches(*_instances->at(ins));
                 Solucion* solucion = local->ILS();
                 cout << "Instancia " << ins << ", solución: " << endl << solucion << endl;
+            }
+        }
+
+        void HeuristicasConstructivas(int32_t ins = -1){
+            Constructivas* cons;
+            Solucion* solucion;
+            // Ejecutar para todas las instancias cargadas
+            if (ins < 0){
+                //cout << "Numero de instancias: " << _nInstancias << endl;     // DEBUG
+                for (uint16_t i = 0; i < _nInstancias; i++){
+                    //cout << "Instancia " << i << "          (" << C_GREEN << _instances->at(i)->GetMejorNumContenedores() << C_DEFAULT << ")" << endl;
+                    cout << *_instances->at(i) << endl;
+                    cons = new Constructivas(*_instances->at(i));
+
+                    cout << "-- GRASP: " << endl;
+                    solucion = cons->GRASP();
+                    cout << *solucion;
+                }
+            }else{
+                cons = new Constructivas(*_instances->at(ins));
+
+                cout << "-- GRASP: " << endl;
+                solucion = cons->GRASP();
+                cout << *solucion;
             }
         }
 

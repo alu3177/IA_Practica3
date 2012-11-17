@@ -8,7 +8,7 @@ extern uint16_t GetMayor (vector<uint16_t> &v);
 
 class BaseClass{
     public:
-        BaseClass (Instancia ins) : _instance(ins) {}
+        BaseClass (Instancia &ins) : _instance(ins) {}
 
         inline void Print() { cout << _instance << endl; }  // DEBUG: BORRAME
 

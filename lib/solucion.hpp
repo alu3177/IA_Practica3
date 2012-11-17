@@ -5,7 +5,7 @@
 struct Contenedor{
     uint16_t id;    // ID del contendor
     uint16_t c;
-    uint16_t usedSpace;  // Espacio usado
+    uint16_t usedSpace;  // Espacio usado (Si está lleno => usedSpace == c)
 };
 
 class Solucion{
@@ -98,7 +98,7 @@ class Solucion{
             //return ( (_espacioLibre == sol.GetEspacioLibre()) );
             /*
             if ( (_vectorSolucion.size() != sol.GetVectorEspacios().size()) && (_vectorEspacios.size() != sol.GetVectorEspacios().size()) ){
-                
+
                 for (uint16_t i = 0; i < _vectorSolucion.size(); i++){
                     if (_vectorSolucion[i] != sol.GetVectorSolucion()[i])
                         return false;
@@ -106,7 +106,7 @@ class Solucion{
                 for (uint16_t i = 0; i < _vectorEspacios.size(); i++){
                     if (_vectorEspacios[i] != sol.GetVectorEspacios()[i])
                         return false;
-                }             
+                }
             }else
                 return false;
             return true;

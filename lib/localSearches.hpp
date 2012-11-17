@@ -14,7 +14,7 @@ extern Solucion* GeneraSolucionPrimeroQuepa(Instancia* ins, bool ordena = false)
 
 class LocalSearches : public BaseClass {
     public:
-        LocalSearches(Instancia ins) : BaseClass(ins) {}
+        LocalSearches(Instancia &ins) : BaseClass(ins) {}
 /*
         // Búsqueda Local Iterada
         Solucion* ILS(){

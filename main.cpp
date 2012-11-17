@@ -21,11 +21,48 @@
 
 using namespace std;
 
+/*
+    // PRUEBAS CANDIDATOS
+    #include <algorithm>
+    // Representa cada uno de los pasos candidatos
+    struct Candidato{
+        uint16_t oID;  // ID del objeto candidato
+        uint16_t cID;  // ID del contendor candidato
+        uint16_t freeSpace;  // Espacio libre en 'cID' tras insertar 'oID'
+    };
+    // Metodo utilizado para ordenar candidatos con mediante std::sort
+    bool CompareCandidato (Candidato c1, Candidato c2){
+        return (c1.freeSpace > c2.freeSpace);
+    }
+*/
+
+#include "lib/constructivas.hpp"
+
 int main (){
+/*
+    // PRUEBAS CANDIDATOS
+    vector<Candidato> cands;
+    for (uint16_t i = 0; i < 15; i++){
+        Candidato c;
+        c.oID = i;
+        c.cID = i+10;
+        c.freeSpace = rand() % 275;
+        cands.push_back(c);
+
+        cout << "[" << i << "] - " << c.freeSpace << endl;
+    }
+    sort(cands.begin(), cands.end(), CompareCandidato);
+    cout << endl << endl;
+    for (uint16_t i = 0; i < cands.size(); i++){
+        cout << "[" << cands[i].oID << "] - " << cands[i].freeSpace << endl;
+    }
+*/
+
 
     Problema* prob = new Problema();
     prob->ParseFile("data/BPP10.txt");
-    prob->BusquedasLocales();
+    //prob->BusquedasLocales();
+    prob->HeuristicasConstructivas();
 
 
     //cout << *GeneraSolucionPrimeroQuepa(prob->GetInstancia(1)) << endl;
@@ -33,10 +70,10 @@ int main (){
     //cout << *GeneraSolucionInicialRandom(prob->GetInstancia(1)) << endl;
 
 
-/*
+
     // Creamos el problema de las transparencias:
     vector<uint16_t>* w = new vector<uint16_t>;
-
+/*
     w->push_back(3);
     w->push_back(6);
     w->push_back(2);
@@ -53,14 +90,17 @@ int main (){
     Instancia inn = *ins;
     cout << inn << endl;
 
-    LocalSearches* local = new LocalSearches(inn);
-    local->ILS();
+    Constructivas* cons = new Constructivas(inn);
+    cout << *cons->GRASP(15) << endl;
 */
 /*
     cout << *GeneraSolucionPrimeroQuepa(&inn) << endl;
     cout << *GeneraSolucionPrimeroQuepa(&inn, true) << endl;
     cout << *GeneraSolucionInicialRandom(&inn) << endl;
 */
+
+
+
     return 0;
 }
 

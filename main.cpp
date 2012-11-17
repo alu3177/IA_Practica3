@@ -61,8 +61,8 @@ int main (){
 
     Problema* prob = new Problema();
     prob->ParseFile("data/BPP10.txt");
-    //prob->BusquedasLocales();
-    prob->HeuristicasConstructivas();
+    prob->BusquedasLocales();
+    //prob->HeuristicasConstructivas();
 
 
     //cout << *GeneraSolucionPrimeroQuepa(prob->GetInstancia(1)) << endl;
@@ -70,10 +70,10 @@ int main (){
     //cout << *GeneraSolucionInicialRandom(prob->GetInstancia(1)) << endl;
 
 
-
+/*
     // Creamos el problema de las transparencias:
     vector<uint16_t>* w = new vector<uint16_t>;
-/*
+
     w->push_back(3);
     w->push_back(6);
     w->push_back(2);

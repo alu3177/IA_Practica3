@@ -38,16 +38,43 @@ class Problema {
 
         // LLAMADAS A LOS DIFERENTES ALGORITMOS (que están encapsulados en clases)
         // 'ins' permite ejecutar los algoritmos para una sola instancia.
-        void BusquedasLocales(int32_t ins = -1){
+        void BusquedasLocales(int16_t ins = -1){
+            LocalSearches* local;
+            Solucion* solucion;
             // Ejecutar para todas las instancias cargadas
             if (ins < 0){
                 //cout << "Numero de instancias: " << _nInstancias << endl;     // DEBUG
-                LocalSearches* local;
-                Solucion* solucion;
                 for (uint16_t i = 0; i < _nInstancias; i++){
-                    //cout << "Instancia " << i << "          (" << C_GREEN << _instances->at(i)->GetMejorNumContenedores() << C_DEFAULT << ")" << endl;
                     cout << *_instances->at(i) << endl;
                     local = new LocalSearches(*_instances->at(i));
+
+                    //cout << "-- ILS 1: " << endl;
+                    //solucion = local->ILS();
+                    //cout << *solucion;
+
+                    //cout << "-- ILS 2: " << endl;
+                    //solucion = local->ILS2();
+                    //cout << *solucion;
+
+                    //cout << "-- SA 1: " << endl;
+                    //solucion = local->SA();
+                    //cout << *solucion;
+
+                    //cout << "-- SA 2: " << endl;
+                    //solucion = local->SA2();
+                    //cout << *solucion;
+
+                    //cout << "-- VNS 1: " << endl;
+                    //solucion = local->VNS();
+                    //cout << *solucion;
+
+                    cout << "-- TS 1: " << endl;
+                    solucion = local->TS(50);
+                    cout << *solucion << endl;
+
+                }
+            }else{
+                local = new LocalSearches(*_instances->at(ins));
 
                     cout << "-- ILS 1: " << endl;
                     solucion = local->ILS();
@@ -72,23 +99,15 @@ class Problema {
                     cout << "-- TS 1: " << endl;
                     solucion = local->TS(25);
                     cout << *solucion << endl;
-
-                }
-            }else{
-                LocalSearches* local = new LocalSearches(*_instances->at(ins));
-                Solucion* solucion = local->ILS();
-                cout << "Instancia " << ins << ", solución: " << endl << solucion << endl;
             }
         }
 
-        void HeuristicasConstructivas(int32_t ins = -1){
+        void HeuristicasConstructivas(int16_t ins = -1){
             Constructivas* cons;
             Solucion* solucion;
             // Ejecutar para todas las instancias cargadas
             if (ins < 0){
-                //cout << "Numero de instancias: " << _nInstancias << endl;     // DEBUG
                 for (uint16_t i = 0; i < _nInstancias; i++){
-                    //cout << "Instancia " << i << "          (" << C_GREEN << _instances->at(i)->GetMejorNumContenedores() << C_DEFAULT << ")" << endl;
                     cout << *_instances->at(i) << endl;
                     cons = new Constructivas(*_instances->at(i));
 

@@ -86,34 +86,47 @@ class Solucion{
 
         bool operator  < (Solucion &sol){
             //cout << _espacioLibre << " < " << sol.GetEspacioLibre() << endl; // DEBUG
-            return ( (_espacioLibre < sol.GetEspacioLibre()) );
+            //return ( (_espacioLibre < sol.GetEspacioLibre()) );
+            return ( (_nContenedores < sol.GetNumContenedores()) );
         }
 
         bool operator  <= (Solucion &sol){
             //cout << _espacioLibre << " < " << sol.GetEspacioLibre() << endl; // DEBUG
-            return ( (_espacioLibre <= sol.GetEspacioLibre()) );
+            //return ( (_espacioLibre <= sol.GetEspacioLibre()) );
+            return ( (_nContenedores <= sol.GetNumContenedores()) );
         }
 
         bool operator  == (Solucion &sol){
-            //return ( (_espacioLibre == sol.GetEspacioLibre()) );
-            /*
-            if ( (_vectorSolucion.size() != sol.GetVectorEspacios().size()) && (_vectorEspacios.size() != sol.GetVectorEspacios().size()) ){
+        /*
+             // Método estrictamente correcto de hacer el ==
+            if ( (_nContenedores == sol.GetNumContenedores()) && (_espacioLibre == sol.GetEspacioLibre()) \
+                && (_vectorSolucion.size() == sol.GetVectorEspacios().size()) && (_vectorEspacios.size() == sol.GetVectorEspacios().size()) ){
 
-                for (uint16_t i = 0; i < _vectorSolucion.size(); i++){
-                    if (_vectorSolucion[i] != sol.GetVectorSolucion()[i])
-                        return false;
+                    for (uint16_t i = 0; i < _vectorSolucion.size(); i++){
+                        if (_vectorSolucion[i] != sol.GetVectorSolucion()[i])
+                            return false;
+                    }
+                    for (uint16_t i = 0; i < _vectorEspacios.size(); i++){
+                        if (_vectorEspacios[i] != sol.GetVectorEspacios()[i])
+                            return false;
+                    }
+
+                    return true;
                 }
-                for (uint16_t i = 0; i < _vectorEspacios.size(); i++){
-                    if (_vectorEspacios[i] != sol.GetVectorEspacios()[i])
-                        return false;
-                }
-            }else
-                return false;
-            return true;
+            return false;
             */
-            if ( (_nContenedores == sol.GetNumContenedores()) && (_espacioLibre == sol.GetEspacioLibre()) )
+            /*
+            if ( (_nContenedores == sol.GetNumContenedores()) && (_espacioLibre == sol.GetEspacioLibre()) \
+                && (_vectorSolucion.size() == sol.GetVectorEspacios().size()) && (_vectorEspacios.size() == sol.GetVectorEspacios().size()) ){
+                    return true;
+                }
+                return false;
+            */
+
+            if (_nContenedores == sol.GetNumContenedores())
                 return true;
             return false;
+
         }
 
         int operator  - (Solucion &sol){

@@ -5,9 +5,10 @@
 #ifndef LOCALSEARCHES_H
 #define LOCALSEARCHES_H
 
-const uint32_t MAXTEMP = 99;   // Temperatura maxima inicial para el SA
+const uint16_t MAXTEMP = 99;   // Temperatura maxima inicial para el SA
 const float DEFAULTSTEP = 0.333;  // Con 0.333 se obtienen valores mediocres en un tiempo aceptable
                                   // Con 0.133 se obtienen valores aceptables en un tiempo mediocre
+const uint16_t MAXITERATIONS = 350;  // Numero maximo de iteraciones (Usado en TS)
 
 extern Solucion* GeneraSolucionInicialRandom(Instancia* ins);
 extern Solucion* GeneraSolucionPrimeroQuepa(Instancia* ins, bool ordena = false);
@@ -15,30 +16,6 @@ extern Solucion* GeneraSolucionPrimeroQuepa(Instancia* ins, bool ordena = false)
 class LocalSearches : public BaseClass {
     public:
         LocalSearches(Instancia &ins) : BaseClass(ins) {}
-/*
-        // Búsqueda Local Iterada
-        Solucion* ILS(){
-            bool seguir = true;
-            uint32_t maxIteraciones = 150; // TODO: make me a constant
-            uint32_t iter = 0;
-            Solucion* actual = GeneraSolucionInicialRandom(&_instance);
-            Solucion* mejorSol = actual;
-
-            while (iter < maxIteraciones){
-                vector<Solucion* >* sols = GetVecinasMenosEspacio(actual);
-                for (uint16_t i = 0; i < sols->size(); i++){
-                    if (*sols->at(i) <= *mejorSol){
-                        mejorSol = sols->at(i);
-                    } else break;
-                }
-                iter++;
-                actual = GeneraSolucionInicialRandom(&_instance);
-            }
-            //cout << "Mejor Solución:" << endl << mejorSol << endl;
-            return mejorSol;
-
-        }
-*/
 
         // Búsqueda Local Iterada
         Solucion* ILS(){
@@ -207,6 +184,7 @@ class LocalSearches : public BaseClass {
         }
 
 
+        // Instroduce 'nSol' al final de 'vin'. Si se sobrepasa 'tMax' se extrae el primer elemento de 'vin'
         void ActualizaTabu (vector<Solucion* > &vin, Solucion* nSol, uint16_t tMax = 5){
             vin.push_back(nSol);
             if (vin.size() > tMax)
@@ -222,13 +200,13 @@ class LocalSearches : public BaseClass {
             //bool seguir = true; // TODO: Poner condicion de parada de verdad
             uint16_t iter = 0;
 
-            while (iter < 150){
+            while (iter < MAXITERATIONS){
                 actual = GeneraMejorVecina(actual, tabu);
                 //cout << "Fin While 1" << endl; // DEBUG
                 //cout << *actual << " < " << *mejorSol << endl; // DEBUG
                 if (*actual < *mejorSol){
                     mejorSol = actual;
-                    cout << C_CYAN << "      MEJORA" << C_DEFAULT << endl; // DEBUG
+                    //cout << C_CYAN << "      MEJORA" << C_DEFAULT << endl; // DEBUG
                 }
                 //cout << "Fin IF" << endl; // DEBUG
                 ActualizaTabu(tabu, actual, tMax);

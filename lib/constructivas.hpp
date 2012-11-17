@@ -19,7 +19,7 @@ class Constructivas : public BaseClass {
         // Constructor
         Constructivas(Instancia &ins) : BaseClass(ins) {}
         // Heurísticas
-        Solucion* GRASP(uint16_t t = 30);
+        Solucion* GRASP(uint16_t t = 60);
 
     private:
         vector<Candidato> GetListaRestringidaCandidatos(vector<uint16_t> &pesos, vector<Contenedor* > &contenedores, uint16_t t);

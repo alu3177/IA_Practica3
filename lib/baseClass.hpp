@@ -137,14 +137,13 @@ class BaseClass{
             Solucion* bestSol = sIn;
 
             for (uint16_t i = 0; i < vecinas.size(); i++){
-                if (*vecinas[i] < *bestSol){
+                if (*vecinas[i] <= *bestSol){
                     //cout << "MejorVecina, Mejora" << endl; // DEBUG
                     if (!InVector(tabu, vecinas[i])){
                         bestSol = vecinas[i];
                         //cout << "Cojo uno" << endl; // DEBUG
-                    }
-                    //else
-                        //cout << "Descarto" << endl; // DEBUG
+                    } //else
+                      //  cout << "Descarto" << endl; // DEBUG
                 }
             }
 

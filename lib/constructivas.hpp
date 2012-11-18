@@ -29,5 +29,4 @@ class Constructivas : public BaseClass {
     private:
         vector<Candidato> GetListaRestringidaCandidatos(vector<uint16_t> &pesos, vector<Contenedor* > &contenedores, uint16_t t);
 };
-
 #endif

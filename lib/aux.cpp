@@ -56,6 +56,63 @@ bool InVector (vector<Solucion* > &vin, Solucion* sol){
     return false;
 }
 
+// Comprueba si 'n' está en 'vin'
+bool InVector (vector<uint16_t> &vin, uint16_t n){
+    for (uint16_t i = 0; i < vin.size(); i++){
+        if (vin[i] == n){
+            return true;
+        }
+    }
+    return false;
+}
+
+// Reemplaza los valores 'org' por 'newVal' en el vector 'vin'
+void Replace(vector<uint16_t> &vin, uint16_t org, uint16_t newVal){
+    for (uint16_t i = 0; i < vin.size(); i++)
+        if (vin[i] == org)
+            vin[i] = newVal;
+}
+// Deveulve el valor mayor dentro de 'vin'
+uint16_t GetMayor(vector<uint16_t> &vin){
+    uint16_t result = 0;
+    for (uint16_t i = 0; i < vin.size(); i++)
+        if (vin[i] > result)
+            result = vin[i];
+    return result;
+}
+// Deveulve la posicion del valor mayor dentro de 'vin'
+uint16_t GetPosicionMayor(vector<uint16_t> &vin){
+    uint16_t mayor = 0;
+    uint16_t mayorPos = 0;
+    for (uint16_t i = 0; i < vin.size(); i++)
+        if (vin[i] > mayor){
+            mayor = vin[i];
+            mayorPos = i;
+        }
+    return mayorPos;
+}
+// Deveulve el valor menor dentro de 'vin'
+uint16_t GetMenor(vector<uint16_t> &vin){
+    uint16_t result = 9999;
+    for (uint16_t i = 0; i < vin.size(); i++)
+        if (vin[i] < result){
+            //cout << vin[i] << "<" << result << endl; // DEBUG
+            result = vin[i];
+        }
+    return result;
+}
+// Deveulve la posicion del valor menor dentro de 'vin'
+uint16_t GetPosicionMenor(vector<uint16_t> &vin){
+    uint16_t menor = 9999;
+    uint16_t menorPos = 0;
+    for (uint16_t i = 0; i < vin.size(); i++)
+        if (vin[i] < menor){
+            menor = vin[i];
+            menorPos = i;
+        }
+    return menorPos;
+}
+
 // Instroduce cada objeto en el primer contenedor donde quepa
 Solucion* GeneraSolucionPrimeroQuepa(Instancia* ins, bool ordena){
     vector<Contenedor* > contenedores;

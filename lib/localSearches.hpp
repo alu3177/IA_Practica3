@@ -50,5 +50,4 @@ class LocalSearches : public BaseClass {
         // Realiza una busqueda voraz
         Solucion* Greedy(Solucion* &sIn);
 };
-
 #endif

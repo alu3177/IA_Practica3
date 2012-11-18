@@ -2,6 +2,7 @@
 #include "aux.cpp"
 #include "localSearches.hpp"
 #include "constructivas.hpp"
+#include "genetics.hpp"
 
 using namespace std;
 
@@ -118,6 +119,28 @@ class Problema {
             }
         }
 
+        void Geneticas(int16_t ins = -1){
+            Genetics* cons;
+            Solucion* solucion;
+            // Ejecutar para todas las instancias cargadas
+            if (ins < 0){
+                for (uint16_t i = 0; i < _nInstancias; i++){
+                    cout << *_instances->at(i) << endl;
+                    cons = new Genetics(*_instances->at(i));
+
+                    cout << "-- AG: " << endl;
+                    solucion = cons->AG();
+                    cout << *solucion << endl;
+                }
+            }else{
+                cons = new Genetics(*_instances->at(ins));
+
+                cout << "-- AG: " << endl;
+                solucion = cons->AG();
+                cout << *solucion;
+            }
+        }
+
         // Carga los todos los datos necesarios desde el fichero situado en 'path'
         void ParseFile (const char* path){
             fstream file;
@@ -219,5 +242,4 @@ class Problema {
         }
 
 };
-
 #endif

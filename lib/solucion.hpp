@@ -1,12 +1,20 @@
 #include <stdint.h>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 #include "../definitions.h"
 
 using namespace std;
 
 #ifndef SOLUCION_H
 #define SOLUCION_H
+
+extern bool InVector (vector<uint16_t> &vin, uint16_t n);
+extern void Replace(vector<uint16_t> &vin, uint16_t org, uint16_t newVal);
+extern uint16_t GetMayor(vector<uint16_t> &vin);
+extern uint16_t GetPosicionMayor(vector<uint16_t> &vin);
+extern uint16_t GetMenor(vector<uint16_t> &vin);
+extern uint16_t GetPosicionMenor(vector<uint16_t> &vin);
 
 struct Contenedor{
     uint16_t id;    // ID del contendor
@@ -41,6 +49,100 @@ class Solucion{
                 _nContenedores = _vectorEspacios.size();
         }
 
+        // Constructor a partir de un vector solucion, el vector de pesos y la capacidad de los contenedores
+        Solucion(vector<uint16_t> vSol, uint16_t capacidad, vector<uint16_t> pesos){
+            if (vSol.size() > 0){
+                SetVectorSolucion (vSol);
+            }
+            // Obtenemos el numero de contenedores
+            _nContenedores = 0;
+            _espacioLibre = 0;
+            vector<uint16_t> contenedores;
+            for (uint16_t i = 0; i < _vectorSolucion.size(); i++){
+                if (!InVector(contenedores, _vectorSolucion[i])){
+                    _nContenedores++;
+                    contenedores.push_back(_vectorSolucion[i]);
+                }
+            }
+
+            sort(contenedores.begin(), contenedores.end());
+            // Comprobamos que los IDs de los contenedores sean correctos
+            // (Los Ids de contenedores del vector solucion pueden no ser consecutivos)
+            // El valor 'contenedores[i]' debe ser igual a 'i' tras haberlos ordenado
+            for (uint16_t i = 0; i < contenedores.size(); i++){
+                if (contenedores[i] != i){
+                    Replace(_vectorSolucion, contenedores[i], i);
+                    contenedores[i] = i;
+                }
+            }
+
+            // Calculamos los valores de '_vectorEspacios'
+            for (uint16_t j = 0; j < _nContenedores; j++){ // Recorremos contenedores
+                uint16_t usedSpaceCont = 0;  // Espacio usado en el contenedor actual 'j'
+                for (uint16_t i = 0; i < _vectorSolucion.size(); i++){  // Recorremos objetos
+                    if (_vectorSolucion[i] == j){  // Objeto 'i' esta en contenedor 'j'?
+                        usedSpaceCont += pesos[i];
+                        //cout << "Objeto " << i << " en contenedor " << j << endl; // DEBUG
+                    }
+                }
+                _vectorEspacios.push_back(usedSpaceCont);
+                _espacioLibre += capacidad - usedSpaceCont;
+            }
+
+            // Comprobamos si algun contenedor excede su capacidad maxima
+            if (GetMayor(_vectorEspacios) > capacidad){
+                this->RepairOverLoad(capacidad, pesos);
+            }
+        }
+
+        // Repara la solucion para evitar la sobrecarga de capacidad de contenedores
+        void RepairOverLoad(uint16_t capacidad, vector<uint16_t> pesos){
+            //cout << " OVERLOAD !!" << endl; // DEBUG
+            //cout << *this << endl; // DEBUG
+            _espacioLibre = 0;
+            for (uint16_t j = 0; j < _nContenedores; j++){  // Recorremos contenedores (en el vector de espacios)
+                if(_vectorEspacios[j] > capacidad){  // Se produce SobreCarga del contenedor 'j'
+                    uint16_t nCap = 0;  // Nueva capacidad del contenedor
+                    for (uint16_t i = 0; i < _vectorSolucion.size(); i++){  // Recorremos el vector solucion buscando las asociadas a 'j'
+                        if (_vectorSolucion[i] == j){  // 'i' esta en 'j'
+                            if ((nCap + pesos[i]) <= capacidad){  // Objeto 'i' cabe en 'j'
+                                nCap += pesos[i];
+                            }else{  // Objeto 'i' no cabe en 'j'
+                                //cout << i << " [" << pesos[i] << "] no cabe en " << j << " -- (" << GetMenor(_vectorEspacios) << ", " << GetPosicionMenor(_vectorEspacios) << ")" << endl; // DEBUG
+                                //cout << (capacidad - GetMenor(_vectorEspacios)) <<  ">=" << pesos[i] << "  ?" << endl; // DEBUG
+                                if ((capacidad - GetMenor(_vectorEspacios)) >= pesos[i]){  // ¿Cabe en algun otro contenedor?
+                                    //cout << "Moviendo " << i << " a " << GetPosicionMenor(_vectorEspacios) << endl; // DEBUG
+                                    _vectorSolucion[i] = GetPosicionMenor(_vectorEspacios);
+                                    _vectorEspacios[GetPosicionMenor(_vectorEspacios)] += pesos[i];
+                                    _vectorEspacios[j] -= pesos[i];
+
+                                }else{ // No cabe en ningun contenedor => Creamos uno
+                                    _vectorEspacios.push_back(pesos[i]);  // Añadimos el dato al vector de espacios
+                                    _vectorSolucion[i] = _vectorEspacios.size() - 1;  // El ID del ultimo contenedor creado es igual al tamaño del vector - 1
+                                    _vectorEspacios[j] -= pesos[i];
+                                    //cout << "Creado nuevo contenedor : " << _vectorEspacios.size() << endl; // DEBUG
+                                    _nContenedores++;
+                                }
+                            }
+                        }
+                    }
+                }
+                _espacioLibre += capacidad - _vectorEspacios[j];
+            }
+        }
+
+        // Comprueba si la solucion es factible
+        bool Factible(uint16_t capacidad){
+            if (_nContenedores != _vectorEspacios.size())
+                return false;
+            for (uint16_t j = 0; j < _vectorEspacios.size(); j++){
+                if (_vectorEspacios[j] > capacidad)
+                    return false;
+            }
+
+            return true;
+        }
+
         // GETTERS
         inline vector<uint16_t> GetVectorSolucion() { return _vectorSolucion; }
         inline vector<uint16_t> GetVectorEspacios() { return _vectorEspacios; }
@@ -71,10 +173,12 @@ class Solucion{
         }
 
         inline void SetNumContenedores(uint16_t n) { _nContenedores = n; }
+        inline void SetSolucion(uint16_t sol, uint16_t pos) { _vectorSolucion[pos] = sol; }
+        inline void SetEspacio(uint16_t esp, uint16_t pos) { _vectorEspacios[pos] = esp; }
 
         // SOBRECARGA DE OPERADORES
         friend ostream& operator << (ostream &o, Solucion &sol){
-            /*
+/*
             o << "Vector Solucion: [ ";
             for (uint16_t i = 0; i < sol.GetVectorSolucion().size(); i++)
                 o << sol.GetVectorSolucion()[i] << " ";
@@ -83,7 +187,7 @@ class Solucion{
             for (uint16_t i = 0; i < sol.GetVectorEspacios().size(); i++)
                 o << sol.GetVectorEspacios()[i] << " ";
             o << "]" << endl;
-            */
+*/
             o << "Numero de contenedores: " << C_BRED << sol.GetNumContenedores() << endl;
             o << C_DEFAULT << "Espacio Libre: " << C_BRED << sol.GetEspacioLibre() << C_DEFAULT << endl;
             return o;

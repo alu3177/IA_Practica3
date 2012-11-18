@@ -43,5 +43,4 @@ class BaseClass{
         // propaga los cambios al vector solucion 'vSol'
         void BorrarContenedor(vector<uint16_t> &vSol, vector<uint16_t> &vEsp, uint16_t pos);
 };
-
 #endif

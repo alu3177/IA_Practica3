@@ -3,7 +3,7 @@
 CC = g++
 CFLAGS = -ansi -pedantic
 CDEBUG = -g
-OBJS = main.o baseClass.o constructivas.o localSearches.o
+OBJS = main.o baseClass.o constructivas.o localSearches.o genetics.o
 MAIN = pract3
 EXEC = pract3
 
@@ -20,6 +20,9 @@ constructivas.o: lib/constructivas.cpp lib/constructivas.hpp
 	$(CC) $(CDEBUG) $(CFLAGS) -c $<
 
 localSearches.o: lib/localSearches.cpp lib/localSearches.hpp
+	$(CC) $(CDEBUG) $(CFLAGS) -c $<
+
+genetics.o: lib/genetics.cpp lib/genetics.hpp
 	$(CC) $(CDEBUG) $(CFLAGS) -c $<
 
 .PHONY: clean

@@ -1,11 +1,16 @@
 #include <algorithm>
 #include "baseClass.hpp"
 
+using namespace std;
+
+extern bool FullyExplored (vector<uint16_t>&);
+
 #ifndef CONSTRUCTIVAS_H
 #define CONSTRUCTIVAS_H
 
-extern bool FullyExplored (vector<uint16_t>&);
 #define EXPLOREDWEIGHT 0    // Marca para indicar que se ha introducido dicho objeto en algun contenedor
+
+const uint16_t GRASP_T = 60;
 
 // Representa cada uno de los pasos candidatos
 struct Candidato{
@@ -19,7 +24,7 @@ class Constructivas : public BaseClass {
         // Constructor
         Constructivas(Instancia &ins) : BaseClass(ins) {}
         // Heurísticas
-        Solucion* GRASP(uint16_t t = 60);
+        Solucion* GRASP(uint16_t t = GRASP_T);
 
     private:
         vector<Candidato> GetListaRestringidaCandidatos(vector<uint16_t> &pesos, vector<Contenedor* > &contenedores, uint16_t t);

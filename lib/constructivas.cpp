@@ -1,6 +1,6 @@
 #include "constructivas.hpp"
 
-// Metodo utilizado para ordenar de menor a mayor (espacio dejado) candidatos mediante std::sort
+// Metodo utilizado para ordenar de menor a mayor (espacio dejado) candidatos en std::sort
 bool CompareCandidato (Candidato c1, Candidato c2){
     return (c1.freeSpace < c2.freeSpace);
 }
@@ -41,6 +41,7 @@ Solucion* Constructivas::GRASP (uint16_t t){
     return result;
 }
 
+// Obtiene la Lista Restringida de Candidatos
 vector<Candidato> Constructivas::GetListaRestringidaCandidatos(vector<uint16_t> &pesos, vector<Contenedor* > &contenedores, uint16_t t){
     vector<Candidato> candidatos;  // Vector con todos los pasos candidatos
 
@@ -69,7 +70,6 @@ vector<Candidato> Constructivas::GetListaRestringidaCandidatos(vector<uint16_t> 
     }
     // Ordenamos de menor a mayor y nos quedamos con los 't' primeros
     sort(candidatos.begin(), candidatos.end(), CompareCandidato);
-
     vector<Candidato> result;
     for (uint16_t i = 0; i < candidatos.size(); i++){
         if (i < t)

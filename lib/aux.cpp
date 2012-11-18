@@ -1,13 +1,25 @@
-/*
- * Contiene los métodos generadores de soluciones.
- * Debe incluirse en el fichero 'main' del programa.
- */
+#include <stdint.h>
+#include <stdlib.h>
+#include <vector>
+#include "instancia.hpp"
 #include "solucion.hpp"
 
-#ifndef GENERADORES_H
-#define GENERADORES_H
+using namespace std;
 
 #define EXPLOREDWEIGHT 0    // Marca para indicar que se ha introducido dicho objeto en algun contenedor
+
+/* FUNCIONES AUXILIARES de manejo de char* */
+void ResetChar (char* str, uint16_t size){
+   for (uint16_t i = 0; i < size; i++)
+      str[i] = 0;
+}
+
+bool IsEmpty (char* str, uint16_t size){
+   for (uint16_t i = 0; i < size; i++)
+      if (str[i] != 0)
+         return false;
+   return true;
+}
 
 // Comprueba si 'v' ha sido completamente explorado (cada objeto asignado a un contenedor)
 bool FullyExplored (vector<uint16_t> &v){
@@ -30,20 +42,20 @@ void BubbleSort(vector<uint16_t> &v){
         }
     }
 }
-/*
-// Devuelve la posicion del objeto con mayor v[i]
-uint16_t GetMayor (vector<uint16_t> &v){
-    uint16_t mayor = 0;
-    uint16_t result = 0;
-    for (uint16_t i = 0; i < v.size(); i++){
-        if (v[i] > mayor){
-            mayor = v[i];
-            result = i;
+
+// Comprueba si 'sol' está en 'vin'
+bool InVector (vector<Solucion* > &vin, Solucion* sol){
+    for (uint16_t i = 0; i < vin.size(); i++){
+        if (*vin[i] == *sol){
+            //cout << *vin[i] << " == " << *sol << endl; // DEBUG
+            //cout << C_CYAN << "     IGUALL !!" << C_DEFAULT << endl; // DEBUG
+            return true;
         }
     }
-    return result;
+    //cout << "No estaba ..." << endl; // DEBUG
+    return false;
 }
-*/
+
 // Instroduce cada objeto en el primer contenedor donde quepa
 Solucion* GeneraSolucionPrimeroQuepa(Instancia* ins, bool ordena){
     vector<Contenedor* > contenedores;
@@ -127,5 +139,3 @@ Solucion* GeneraSolucionInicialRandom(Instancia* ins){
     //cout << "Creo solucion y salgo" << endl;
     return result;
 }
-
-#endif

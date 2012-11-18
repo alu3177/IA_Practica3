@@ -1,6 +1,12 @@
+#include <stdint.h>
+#include <vector>
+#include <fstream>
+#include "../definitions.h"
+
+using namespace std;
+
 #ifndef SOLUCION_H
 #define SOLUCION_H
-
 
 struct Contenedor{
     uint16_t id;    // ID del contendor
@@ -16,6 +22,7 @@ class Solucion{
         uint16_t _espacioLibre;
 
     public:
+        // CONSTRUCTORES
         Solucion(vector<uint16_t> vSol, vector<Contenedor* > vSpa, uint16_t e, uint16_t c = 0) : _nContenedores(c), _espacioLibre(e) {
             if (vSol.size() > 0)
                 SetVectorSolucion (vSol);
@@ -39,14 +46,12 @@ class Solucion{
         inline vector<uint16_t> GetVectorEspacios() { return _vectorEspacios; }
         inline uint16_t GetNumContenedores() { return _nContenedores; }
         inline uint16_t GetEspacioLibre() { return _espacioLibre; }
-
         // SETTERS
         inline void SetEspacioLibre(uint16_t s) { _espacioLibre = s; }
 
         void SetVectorSolucion(vector<uint16_t> &v) {
             _vectorSolucion.clear();
             for (uint16_t i = 0; i < v.size(); i++){
-                //cout << "Metiendo en vector " << v[i] << endl; // DEBUG
                 _vectorSolucion.push_back(v[i]);
             }
         }
@@ -67,7 +72,7 @@ class Solucion{
 
         inline void SetNumContenedores(uint16_t n) { _nContenedores = n; }
 
-        // SobreCarga de Operadores
+        // SOBRECARGA DE OPERADORES
         friend ostream& operator << (ostream &o, Solucion &sol){
             /*
             o << "Vector Solucion: [ ";
@@ -83,20 +88,9 @@ class Solucion{
             o << C_DEFAULT << "Espacio Libre: " << C_BRED << sol.GetEspacioLibre() << C_DEFAULT << endl;
             return o;
         }
-
-        bool operator  < (Solucion &sol){
-            //cout << _espacioLibre << " < " << sol.GetEspacioLibre() << endl; // DEBUG
-            //return ( (_espacioLibre < sol.GetEspacioLibre()) );
-            return ( (_nContenedores < sol.GetNumContenedores()) );
-        }
-
-        bool operator  <= (Solucion &sol){
-            //cout << _espacioLibre << " < " << sol.GetEspacioLibre() << endl; // DEBUG
-            //return ( (_espacioLibre <= sol.GetEspacioLibre()) );
-            return ( (_nContenedores <= sol.GetNumContenedores()) );
-        }
-
-        bool operator  == (Solucion &sol){
+        bool operator < (Solucion &sol){ return ( (_nContenedores < sol.GetNumContenedores()) ); }
+        bool operator <= (Solucion &sol){ return ( (_nContenedores <= sol.GetNumContenedores()) ); }
+        bool operator == (Solucion &sol){
         /*
              // Método estrictamente correcto de hacer el ==
             if ( (_nContenedores == sol.GetNumContenedores()) && (_espacioLibre == sol.GetEspacioLibre()) \
@@ -128,10 +122,6 @@ class Solucion{
             return false;
 
         }
-
-        int operator  - (Solucion &sol){
-            //cout << _nContenedores << " - " <<  sol.GetNumContenedores() << endl;  // DEBUG
-            return ( (_nContenedores - sol.GetNumContenedores()) );
-        }
+        int operator - (Solucion &sol){ return ( (_nContenedores - sol.GetNumContenedores()) ); }
 };
 #endif

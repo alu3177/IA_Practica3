@@ -8,6 +8,11 @@ using namespace std;
 
 #define EXPLOREDWEIGHT 0    // Marca para indicar que se ha introducido dicho objeto en algun contenedor
 
+// Metodo utilizado para ordenar de menor a mayor (espacio dejado) soluciones en std::sort
+bool CompareSolucion (Solucion* s1, Solucion* s2){
+    return (s1->GetEspacioLibre() < s2->GetEspacioLibre());
+}
+
 /* FUNCIONES AUXILIARES de manejo de char* */
 void ResetChar (char* str, uint16_t size){
    for (uint16_t i = 0; i < size; i++)

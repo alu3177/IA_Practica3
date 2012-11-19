@@ -57,7 +57,7 @@ class Solucion{
             // Obtenemos el numero de contenedores
             _nContenedores = 0;
             _espacioLibre = 0;
-            vector<uint16_t> contenedores;
+            vector<uint16_t> contenedores;  // Vector con las IDs de los contenedores extraidas de vSol
             for (uint16_t i = 0; i < _vectorSolucion.size(); i++){
                 if (!InVector(contenedores, _vectorSolucion[i])){
                     _nContenedores++;
@@ -103,7 +103,7 @@ class Solucion{
             for (uint16_t j = 0; j < _nContenedores; j++){  // Recorremos contenedores (en el vector de espacios)
                 if(_vectorEspacios[j] > capacidad){  // Se produce SobreCarga del contenedor 'j'
                     uint16_t nCap = 0;  // Nueva capacidad del contenedor
-                    for (uint16_t i = 0; i < _vectorSolucion.size(); i++){  // Recorremos el vector solucion buscando las asociadas a 'j'
+                    for (uint16_t i = 0; i < _vectorSolucion.size(); i++){  // Recorremos el vector solucion buscando los asociados a 'j'
                         if (_vectorSolucion[i] == j){  // 'i' esta en 'j'
                             if ((nCap + pesos[i]) <= capacidad){  // Objeto 'i' cabe en 'j'
                                 nCap += pesos[i];

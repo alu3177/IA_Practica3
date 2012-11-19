@@ -70,6 +70,7 @@ class Problema {
                 }
             }else{
                 local = new LocalSearches(*_instances->at(ins));
+                cout << *_instances->at(ins) << endl;
 
                     cout << "-- ILS 1: " << endl;
                     solucion = local->ILS();
@@ -138,6 +139,104 @@ class Problema {
                 cout << "-- AG: " << endl;
                 solucion = cons->AG();
                 cout << *solucion;
+            }
+        }
+
+        void RunAllHeuristics(int16_t ins = -1){
+            LocalSearches* local;
+            Constructivas* cons;
+            Genetics* gen;
+            Solucion* solucion;
+            // Ejecutar para todas las instancias cargadas
+            if (ins < 0){
+                for (uint16_t i = 0; i < _nInstancias; i++){
+                    cout << *_instances->at(i) << endl;
+                    local = new LocalSearches(*_instances->at(i));
+                    cons = new Constructivas(*_instances->at(i));
+                    gen = new Genetics(*_instances->at(i));
+
+                    cout << C_BLUE << "-- ILS 1: " << C_DEFAULT << endl;
+                    solucion = local->ILS();
+                    cout << *solucion;
+                    delete(solucion);
+
+                    cout << C_BLUE << "-- ILS 2: " << C_DEFAULT << endl;
+                    solucion = local->ILS2();
+                    cout << *solucion;
+                    delete(solucion);
+
+                    cout << C_BLUE << "-- SA 1: " << C_DEFAULT << endl;
+                    solucion = local->SA();
+                    cout << *solucion;
+                    delete(solucion);
+
+                    cout << C_BLUE << "-- SA 2: " << C_DEFAULT << endl;
+                    solucion = local->SA2();
+                    cout << *solucion;
+                    delete(solucion);
+
+                    cout << C_BLUE << "-- VNS 1: " << C_DEFAULT << endl;
+                    solucion = local->VNS();
+                    cout << *solucion;
+                    delete(solucion);
+
+                    cout << C_BLUE << "-- TS 1: " << C_DEFAULT << endl;
+                    solucion = local->TS();
+                    cout << *solucion;
+                    delete(solucion);
+
+                    cout << C_BLUE << "-- GRASP: " << C_DEFAULT << endl;
+                    solucion = cons->GRASP();
+                    cout << *solucion;
+                    delete(solucion);
+
+                    cout << C_BLUE << "-- AG: " << C_DEFAULT << endl;
+                    solucion = gen->AG();
+                    cout << *solucion << endl;
+                    delete(solucion);
+
+                    delete(local);
+                    delete(cons);
+                    delete(gen);
+
+                }
+            }else{
+                cout << *_instances->at(ins) << endl;
+                local = new LocalSearches(*_instances->at(ins));
+                cons = new Constructivas(*_instances->at(ins));
+                gen = new Genetics(*_instances->at(ins));
+
+                cout << C_BLUE << "-- ILS 1: " << C_DEFAULT << endl;
+                solucion = local->ILS();
+                cout << *solucion;
+
+                cout << C_BLUE << "-- ILS 2: " << C_DEFAULT << endl;
+                solucion = local->ILS2();
+                cout << *solucion;
+
+                cout << C_BLUE << "-- SA 1: " << C_DEFAULT << endl;
+                solucion = local->SA();
+                cout << *solucion;
+
+                cout << C_BLUE << "-- SA 2: " << C_DEFAULT << endl;
+                solucion = local->SA2();
+                cout << *solucion;
+
+                cout << C_BLUE << "-- VNS 1: " << C_DEFAULT << endl;
+                solucion = local->VNS();
+                cout << *solucion;
+
+                cout << C_BLUE << "-- TS 1: " << C_DEFAULT << endl;
+                solucion = local->TS();
+                cout << *solucion;
+
+                cout << C_BLUE << "-- GRASP: " << C_DEFAULT << endl;
+                solucion = cons->GRASP();
+                cout << *solucion;
+
+                cout << C_BLUE << "-- AG: " << C_DEFAULT << endl;
+                solucion = gen->AG();
+                cout << *solucion << endl;
             }
         }
 

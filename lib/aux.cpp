@@ -48,6 +48,11 @@ void BubbleSort(vector<uint16_t> &v){
     }
 }
 
+void InitVector (vector<uint16_t> &vin){
+    for (uint16_t i = 0; i < vin.size(); i++)
+        vin[i] = 0;
+}
+
 // Comprueba si 'sol' está en 'vin'
 bool InVector (vector<Solucion* > &vin, Solucion* sol){
     for (uint16_t i = 0; i < vin.size(); i++){
@@ -116,6 +121,15 @@ uint16_t GetPosicionMenor(vector<uint16_t> &vin){
             menorPos = i;
         }
     return menorPos;
+}
+
+// Devuelve el resultado de sumar todos los elementos de 'vin'
+uint16_t Sum(vector<uint16_t> &vin){
+    uint16_t sum = 0;
+    for (uint16_t i = 0; i < vin.size(); i++)
+        sum += vin[i];
+
+    return sum;
 }
 
 // Instroduce cada objeto en el primer contenedor donde quepa

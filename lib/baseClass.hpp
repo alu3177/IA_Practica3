@@ -6,6 +6,8 @@
 using namespace std;
 
 extern bool InVector (vector<Solucion* >&, Solucion*);
+extern uint16_t GetMayor(vector<uint16_t> &vin);
+extern uint16_t Sum(vector<uint16_t> &vin);
 
 #ifndef BASECLASS_H
 #define BASECLASS_H
@@ -27,8 +29,11 @@ class BaseClass{
         // Devuelve la mejor solucion vecina genrada teniendo en cuenta la lista 'tabu'
         Solucion* GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu);
 
+        // Devuelve una solucion vecina escogida al azar entre las posibles
+        Solucion* GetVecinaRandom(Solucion* sIn);
+
         // Devuelve una solucion vecina (a profundidad k) escogida al azar entre las posibles
-        Solucion* GetVecinaRandom(Solucion* sIn, uint16_t k = 1);
+        Solucion* GetVecinaRandom(Solucion* sIn, uint16_t k);
 
         // Calcula el conjunto de las soluciones vecinas posibles
         // haciendo un movimiento (al primer contenedor donde deje menos espacio)
@@ -37,7 +42,7 @@ class BaseClass{
     private:
         // Mueve el objeto en la posición 'obj' (dentro del vector de pesos o el vector solución),
         // al contenedor 'cont'. Refresca todos los valores afectados
-        Solucion* MoverMenosEspacio(Solucion* &sIn, uint16_t obj, uint16_t cont);
+        Solucion* MoverObjeto(Solucion* &sIn, uint16_t obj, uint16_t cont);
 
         // Borra el contenedor 'pos' del vector de Espacios 'vEsp' y
         // propaga los cambios al vector solucion 'vSol'

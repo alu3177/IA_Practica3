@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <iostream>
 #include "../definitions.h"
 
 using namespace std;
@@ -15,6 +16,7 @@ extern uint16_t GetMayor(vector<uint16_t> &vin);
 extern uint16_t GetPosicionMayor(vector<uint16_t> &vin);
 extern uint16_t GetMenor(vector<uint16_t> &vin);
 extern uint16_t GetPosicionMenor(vector<uint16_t> &vin);
+extern void InitVector (vector<uint16_t> &vin);
 
 struct Contenedor{
     uint16_t id;    // ID del contendor
@@ -98,7 +100,8 @@ class Solucion{
         // Repara la solucion para evitar la sobrecarga de capacidad de contenedores
         void RepairOverLoad(uint16_t capacidad, vector<uint16_t> pesos){
             //cout << " OVERLOAD !!" << endl; // DEBUG
-            //cout << *this << endl; // DEBUG
+            //cout << C_CYAN << *this << endl; // DEBUG
+            //while (!this->Factible(capacidad)){
             _espacioLibre = 0;
             for (uint16_t j = 0; j < _nContenedores; j++){  // Recorremos contenedores (en el vector de espacios)
                 if(_vectorEspacios[j] > capacidad){  // Se produce SobreCarga del contenedor 'j'
@@ -107,16 +110,20 @@ class Solucion{
                         if (_vectorSolucion[i] == j){  // 'i' esta en 'j'
                             if ((nCap + pesos[i]) <= capacidad){  // Objeto 'i' cabe en 'j'
                                 nCap += pesos[i];
-                            }else{  // Objeto 'i' no cabe en 'j'
+                            }else/* if (_vectorEspacios[j] >= pesos[i])*/{  // Objeto 'i' no cabe en 'j'
                                 //cout << i << " [" << pesos[i] << "] no cabe en " << j << " -- (" << GetMenor(_vectorEspacios) << ", " << GetPosicionMenor(_vectorEspacios) << ")" << endl; // DEBUG
                                 //cout << (capacidad - GetMenor(_vectorEspacios)) <<  ">=" << pesos[i] << "  ?" << endl; // DEBUG
                                 if ((capacidad - GetMenor(_vectorEspacios)) >= pesos[i]){  // ¿Cabe en algun otro contenedor?
+                                    //cout << (capacidad - GetMenor(_vectorEspacios)) <<  ">=" << pesos[i] << "  !!" << endl; // DEBUG
                                     //cout << "Moviendo " << i << " a " << GetPosicionMenor(_vectorEspacios) << endl; // DEBUG
                                     _vectorSolucion[i] = GetPosicionMenor(_vectorEspacios);
                                     _vectorEspacios[GetPosicionMenor(_vectorEspacios)] += pesos[i];
                                     _vectorEspacios[j] -= pesos[i];
 
                                 }else{ // No cabe en ningun contenedor => Creamos uno
+                                    //cout << "_vectorSolucion[" << i << "] " << _vectorSolucion[i] << " == " << j << "      ?       ";
+                                    //cout << "_vectorEspacios[" << j << "] (" << _vectorEspacios[j] << ") -= " << "pesos[" << i << "] (" << pesos[i] << ")" << endl; // DEBUG
+
                                     _vectorEspacios.push_back(pesos[i]);  // Añadimos el dato al vector de espacios
                                     _vectorSolucion[i] = _vectorEspacios.size() - 1;  // El ID del ultimo contenedor creado es igual al tamaño del vector - 1
                                     _vectorEspacios[j] -= pesos[i];
@@ -129,6 +136,7 @@ class Solucion{
                 }
                 _espacioLibre += capacidad - _vectorEspacios[j];
             }
+            //}
         }
 
         // Comprueba si la solucion es factible
@@ -143,10 +151,32 @@ class Solucion{
             return true;
         }
 
+        // Comprueba si la solucion es factible y si el vector solucion es valido
+        bool Factible(uint16_t capacidad, vector<uint16_t> pesos){
+            vector<uint16_t> vEspTmp(_vectorEspacios.size() + 1);
+            InitVector(vEspTmp);
+
+            //cout << "Factibleeeeee" << endl; // DEBUG
+            if (this->Factible(capacidad)){
+                for (uint16_t i = 0; i < GetNumObjetos(); i++){
+                    uint16_t j = _vectorSolucion[i];  // Contenedor donde esta 'i'
+                    vEspTmp[j] += pesos[i];
+                    if (vEspTmp[j] > capacidad){
+                        //cout << vEspTmp[j] << " > " << capacidad << endl; // DEBUG
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+
+        }
+
         // GETTERS
         inline vector<uint16_t> GetVectorSolucion() { return _vectorSolucion; }
         inline vector<uint16_t> GetVectorEspacios() { return _vectorEspacios; }
         inline uint16_t GetNumContenedores() { return _nContenedores; }
+        inline uint16_t GetNumObjetos() { return _vectorSolucion.size(); }
         inline uint16_t GetEspacioLibre() { return _espacioLibre; }
         // SETTERS
         inline void SetEspacioLibre(uint16_t s) { _espacioLibre = s; }

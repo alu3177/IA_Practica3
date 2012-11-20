@@ -45,31 +45,23 @@ Solucion* LocalSearches::SA(){
     Solucion* siguiente;
     srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
     do{
-        //cout << "Init" << endl; // DEBUG
         Temp = GetTemperatura(iter);
-        //cout << "Temp = " << Temp << endl; //DEBUG
         if (Temp == 0)
             return actual;
 
         siguiente = GetVecinaRandom(actual);
-        //cout << "Siguiente" << endl; // DEBUG
         int delta = siguiente->Objetivo() - actual->Objetivo();  // Gradiente entre siguiente y actual
-        //cout << "Definido delta" << endl; // DEBUG
         if (delta >= 0){
-            //cout << "Delta >= 0" << endl; // DEBUG
             actual = siguiente;
         }else{
             float probabilidad = exp((float)((float)delta/Temp));    // Probabilidad de aceptar 'siguiente' => e^(delta/Temp)
             float aceptacion = (float)rand()/(float)RAND_MAX; // Genera un numero entre 0.0 y 1.0
             // Aceptaremos la solución si ' aceptacion <= probabilidad'
             if (aceptacion <= probabilidad){
-                //cout << "Delta(" << delta << "): " << aceptacion <<  " <= " << probabilidad << endl;  // DEBUG
                 actual = siguiente;
-                //cout << "CHECHECHE" << endl;// DEBUG
             }
         }
         iter++;
-        //cout << "iter++" << endl; // DEBUG
     } while (Temp > 0);
 
     return actual;
@@ -86,33 +78,25 @@ Solucion* LocalSearches::SA2(uint16_t k){
     Solucion* siguiente;
     srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
     do{
-        //cout << "Init" << endl; // DEBUG
         Temp = GetTemperatura(iter);
-        //cout << "Temp = " << Temp << endl; //DEBUG
         if (Temp == 0)
             return actual;
 
         // En esta ocasion 'siguiente' será una solucion vecina a k movimientos (inspirado en VNS)
         siguiente = GetVecinaRandom(actual, k);
 
-        //cout << "Siguiente" << endl; // DEBUG
         int delta = *siguiente - *actual;  // Gradiente entre siguiente y actual
-        //cout << "Definido delta" << endl; // DEBUG
         if (delta >= 0){
-            //cout << "Delta >= 0" << endl; // DEBUG
             actual = siguiente;
         }else{
             float probabilidad = exp((float)((float)delta/Temp));    // Probabilidad de aceptar 'siguiente' => e^(delta/Temp)
             float aceptacion = (float)rand()/(float)RAND_MAX; // Genera un numero entre 0.0 y 1.0
             // Aceptaremos la solución si ' aceptacion <= probabilidad'
             if (aceptacion <= probabilidad){
-                //cout << "Delta(" << delta << "): " << aceptacion <<  " <= " << probabilidad << endl;  // DEBUG
                 actual = siguiente;
-                //cout << "CHECHECHE" << endl;// DEBUG
             }
         }
         iter++;
-        //cout << "iter++" << endl; // DEBUG
     } while (Temp > 0);
 
     return actual;
@@ -154,17 +138,11 @@ Solucion* LocalSearches::TS(uint16_t tMax){
 
     while (iter < MAXITERATIONS){
         actual = GeneraMejorVecina(actual, tabu);
-        //cout << "Fin While 1" << endl; // DEBUG
-        //cout << *actual << " < " << *mejorSol << endl; // DEBUG
         if (actual->ObjetivoAux(_instance.GetCapacidadC()) < mejorSol->ObjetivoAux(_instance.GetCapacidadC())){
             mejorSol = actual;
-            cout << C_CYAN << "      MEJORA" << C_DEFAULT << endl; // DEBUG
         }
-        //cout << "Fin IF" << endl; // DEBUG
         ActualizaTabu(tabu, actual, tMax);
-        //cout << "Fin Update Tabu" << endl; // DEBUG
         iter++;
-        //cout << "ITER++" << endl; // DEBUG
     }
     return mejorSol;
 }
@@ -172,13 +150,17 @@ Solucion* LocalSearches::TS(uint16_t tMax){
 // Realiza una busqueda voraz
 Solucion* LocalSearches::Greedy(Solucion* &sIn){
     Solucion* actual = sIn;
-    Solucion* vecina = actual;
+    Solucion* vecina = sIn;
+    uint32_t maxIter = 5000;
 
-    while (1){
+    uint32_t iter = 0;
+    while (iter < maxIter){
         vecina = GeneraMejorVecina(actual);
-        if (*vecina < *actual)
+        if (vecina->Objetivo() < actual->Objetivo())
             actual = vecina;
         else
             return actual;
+        iter++;
     }
+    return actual;
 }

@@ -5,7 +5,7 @@
 #ifndef GENETICS_H
 #define GENETICS_H
 
-#define MAXGENERATIONS 70     // Numero maximo de generaciones
+#define MAXGENERATIONS 50     // Numero maximo de generaciones
 #define POBLACION_SIZE 100    // Tamaño de la poblacion inicial
 #define BEST_COUNT     30     // Se escogeran las BEST_COUNT en cada generacion
 #define COUPLES_NUMBER 100    // Numero de parejas formadas en cada generacion
@@ -19,15 +19,6 @@ class Genetics : public BaseClass {
         Solucion* AG(uint16_t maxGen = MAXGENERATIONS);
 
     private:
-/*
-        // Calcula el promedio de huecos de la poblacion 'pob'
-        float EvaluaPoblacion(vector<Solucion* > &pob){
-            uint32_t huecos = 0;
-            for (uint16_t i = 0; i < pob.size(); i++)
-                huecos += pob[i]->GetEspacioLibre();
-            return (huecos / pob.size());
-        }
-*/
         // Selecciona las 'n' mejores soluciones de 'pob'
         vector<Solucion* > SeleccionaMejores(vector<Solucion* > pob, uint16_t n = BEST_COUNT);
 

@@ -87,7 +87,6 @@ class Solucion{
                 for (uint16_t i = 0; i < _vectorSolucion.size(); i++){  // Recorremos objetos
                     if (_vectorSolucion[i] == j){  // Objeto 'i' esta en contenedor 'j'?
                         usedSpaceCont += pesos[i];
-                        //cout << "Objeto " << i << " en contenedor " << j << endl; // DEBUG
                     }
                 }
                 _vectorEspacios.push_back(usedSpaceCont);
@@ -102,9 +101,6 @@ class Solucion{
 
         // Repara la solucion para evitar la sobrecarga de capacidad de contenedores
         void RepairOverLoad(uint16_t capacidad, vector<uint16_t> pesos){
-            //cout << C_CYAN << " OVERLOAD !!" << C_DEFAULT << endl; // DEBUG
-            //cout << C_CYAN << *this << endl; // DEBUG
-            //while (!this->Factible(capacidad)){
             _espacioLibre = 0;
             for (uint16_t j = 0; j < GetNumContenedores(); j++){  // Recorremos contenedores (en el vector de espacios)
                 if(_vectorEspacios[j] > capacidad){  // Se produce SobreCarga del contenedor 'j'
@@ -113,24 +109,16 @@ class Solucion{
                         if (_vectorSolucion[i] == j){  // 'i' esta en 'j'
                             if ((nCap + pesos[i]) <= capacidad){  // Objeto 'i' cabe en 'j'
                                 nCap += pesos[i];
-                            }else/* if (_vectorEspacios[j] >= pesos[i])*/{  // Objeto 'i' no cabe en 'j'
-                                //cout << i << " [" << pesos[i] << "] no cabe en " << j << " -- (" << GetMenor(_vectorEspacios) << ", " << GetPosicionMenor(_vectorEspacios) << ")" << endl; // DEBUG
-                                //cout << (capacidad - GetMenor(_vectorEspacios)) <<  ">=" << pesos[i] << "  ?" << endl; // DEBUG
+                            }else{  // Objeto 'i' no cabe en 'j'
                                 if ((capacidad - GetMenor(_vectorEspacios)) >= pesos[i]){  // ¿Cabe en algun otro contenedor?
-                                    //cout << (capacidad - GetMenor(_vectorEspacios)) <<  ">=" << pesos[i] << "  !!" << endl; // DEBUG
-                                    //cout << "Moviendo " << i << " a " << GetPosicionMenor(_vectorEspacios) << endl; // DEBUG
                                     _vectorSolucion[i] = GetPosicionMenor(_vectorEspacios);
                                     _vectorEspacios[GetPosicionMenor(_vectorEspacios)] += pesos[i];
                                     _vectorEspacios[j] -= pesos[i];
 
                                 }else{ // No cabe en ningun contenedor => Creamos uno
-                                    //cout << "_vectorSolucion[" << i << "] " << _vectorSolucion[i] << " == " << j << "      ?       ";
-                                    //cout << "_vectorEspacios[" << j << "] (" << _vectorEspacios[j] << ") -= " << "pesos[" << i << "] (" << pesos[i] << ")" << endl; // DEBUG
-
                                     _vectorEspacios.push_back(pesos[i]);  // Añadimos el dato al vector de espacios
                                     _vectorSolucion[i] = _vectorEspacios.size() - 1;  // El ID del ultimo contenedor creado es igual al tamaño del vector - 1
                                     _vectorEspacios[j] -= pesos[i];
-                                    //cout << "Creado nuevo contenedor : " << _vectorEspacios.size() << endl; // DEBUG
                                     _nContenedores++;
                                 }
                             }
@@ -139,7 +127,6 @@ class Solucion{
                 }
                 _espacioLibre += capacidad - _vectorEspacios[j];
             }
-            //}
         }
 
         // Comprueba si la solucion es factible
@@ -158,13 +145,11 @@ class Solucion{
             vector<uint16_t> vEspTmp(_vectorEspacios.size() + 1);
             InitVector(vEspTmp);
 
-            //cout << "Factibleeeeee" << endl; // DEBUG
             if (this->Factible(capacidad)){
                 for (uint16_t i = 0; i < GetNumObjetos(); i++){
                     uint16_t j = _vectorSolucion[i];  // Contenedor donde esta 'i'
                     vEspTmp[j] += pesos[i];
                     if (vEspTmp[j] > capacidad){
-                        //cout << vEspTmp[j] << " > " << capacidad << endl; // DEBUG
                         return false;
                     }
                 }
@@ -185,11 +170,8 @@ class Solucion{
                 vector<uint16_t> espacios;  // Vector con los espacios libres en cada contenedor
 
                 for (uint16_t i = 0; i < _vectorEspacios.size(); i++){
-                    //cout << "espacios <= " << capacidad - _vectorEspacios[i] << endl; // DEBUG
                     espacios.push_back(capacidad - _vectorEspacios[i]);
                 }
-
-                //cout << "ObjetivoAux = " << Sum(espacios) << " / " << _nContenedores << "(" << espacios.size() << ", " << _vectorEspacios.size() << ", " << _nContenedores << ")" << endl; // DEBUG
                 return (pow(Sum(espacios), 2) / _nContenedores);
             }
             return 0.0;

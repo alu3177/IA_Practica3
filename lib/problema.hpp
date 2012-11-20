@@ -147,7 +147,7 @@ class Problema {
                     cons = new Constructivas(*_instances->at(i));
                     gen = new Genetics(*_instances->at(i));
 
-/*
+
                     cout << C_BLUE << "-- ILS 1: " << C_DEFAULT << endl;
                     solucion = local->ILS();
                     cout << *solucion;
@@ -157,11 +157,6 @@ class Problema {
                     solucion = local->SA();
                     cout << *solucion;
                     delete(solucion);
-
-                    //cout << C_BLUE << "-- SA 2: " << C_DEFAULT << endl;
-                    //solucion = local->SA2();
-                    //cout << *solucion;
-                    //delete(solucion);
 
                     cout << C_BLUE << "-- VNS 1: " << C_DEFAULT << endl;
                     solucion = local->VNS();
@@ -177,7 +172,7 @@ class Problema {
                     solucion = cons->GRASP();
                     cout << *solucion;
                     delete(solucion);
-*/
+
                     cout << C_BLUE << "-- AG: " << C_DEFAULT << endl;
                     solucion = gen->AG();
                     cout << *solucion << endl;

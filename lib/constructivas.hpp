@@ -9,8 +9,7 @@ extern bool FullyExplored (vector<uint16_t>&);
 #define CONSTRUCTIVAS_H
 
 #define EXPLOREDWEIGHT 0    // Marca para indicar que se ha introducido dicho objeto en algun contenedor
-
-const uint16_t GRASP_T = 60;
+#define GRASP_T        77   // Tamaño por defecto de la LRC
 
 // Representa cada uno de los pasos candidatos
 struct Candidato{

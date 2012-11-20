@@ -20,7 +20,6 @@ Solucion* BaseClass::GeneraSolucionPrimeroQuepa(bool ordena){
     if (ordena){
         sort(pesos.begin(), pesos.end(), MayorAmenor);
         _instance.SetPesos(pesos); // Persistimos los cambios en la instacia, para mantener la coherencia
-        //cout << "SORRRRRT" << endl << *ins << endl; // DEBUG
     }
 
     for (int i = 0; i < pesos.size(); i++){
@@ -63,10 +62,8 @@ Solucion* BaseClass::GeneraSolucionInicialRandom(){
         insertado = false;
         i = rand() % _instance.GetNumObjetos();    // Seleccionamos un elemento al azar
         if (pesos[i] != EXPLOREDWEIGHT){   // Hemos seleccionado un elemento no asignado
-            //cout << "Seleccionado " << i << endl; // DEBUG
             for (uint16_t j = 0; j < contenedores.size(); j++){ // Recorremos vector de contenedores
                 if ( pesos[i] <= (contenedores[j]->c - contenedores[j]->usedSpace) ){ // El objeto 'i' cabe en el contenedor 'j'
-                    //cout << "INSERTANDO objeto " << i << " en contenedor " << j << endl; // DEBUG
                     solucion[i] = contenedores[j]->id;
                     contenedores[j]->usedSpace += pesos[i];
                     sumPesos += pesos[i]; // Incrementamos el peso usado
@@ -81,7 +78,6 @@ Solucion* BaseClass::GeneraSolucionInicialRandom(){
                 cont->c = _instance.GetCapacidadC();
                 cont->usedSpace = 0;
                 contenedores.push_back(cont);
-                //cout << "CREO contenedor " << cont->id << endl;  // DEBUG
             }
         }
     }
@@ -161,14 +157,11 @@ Solucion* BaseClass::GetVecinaRandom(Solucion* sIn){
         uint16_t cont = rand() % sIn->GetNumContenedores(); // Contenedor seleccionado al azar
         result = MoverObjeto(sIn, obj, cont);
         if (result->Factible(_instance.GetCapacidadC(), *_instance.GetPesos())){
-            //cout << "FACTIBLE !! :)" << endl; // DEBUG
             return result;
         }else{
             float prob = (float)rand()/(float)RAND_MAX; // Genera un numero entre 0.0 y 1.0
             if (prob <= chance){
-                //cout << "Reparando !!" << endl; // DEBUG
                 result->RepairOverLoad(_instance.GetCapacidadC(), *_instance.GetPesos());
-                //cout << C_GREEN << *result << endl; // DEBUG
                 if (result->Factible(_instance.GetCapacidadC(), *_instance.GetPesos()))
                     return result;
             }
@@ -185,7 +178,6 @@ Solucion* BaseClass::GetVecinaRandom(Solucion* sIn, uint16_t k){
         sol = GetVecinaRandom(sol);
         profundidad++;
     }
-    //cout << "Prof : "  << profundidad << endl; // DEBUG
     return sol;
 }
 
@@ -194,7 +186,6 @@ Solucion* BaseClass::GetVecinaRandom(Solucion* sIn, uint16_t k){
 // Es decir, sIn->Solucion[obj] = cont
 // No tiene en cuenta si produce o no sobrecarga del contenedor al que se mueve
 Solucion* BaseClass::MoverObjeto(Solucion* &sIn, uint16_t obj, uint16_t cont){
-    //cout << "MoverObjeto" << endl; // DEBUG
     vector<uint16_t> vSolTmp = sIn->GetVectorSolucion();
     vector<uint16_t> vEspTmp = sIn->GetVectorEspacios();
     uint16_t nEspacioLibre = sIn->GetEspacioLibre(); // Nuevo espacio libre
@@ -207,7 +198,6 @@ Solucion* BaseClass::MoverObjeto(Solucion* &sIn, uint16_t obj, uint16_t cont){
                 if (vEspTmp[prevCont] <= 0){  // Si se queda a cero, lo borramos
                     BorrarContenedor(vSolTmp, vEspTmp, prevCont);
                     nEspacioLibre -= _instance.GetCapacidadC();
-                    //cout << "BORRANDO !!!!" << endl;  // DEBUG
                 }
                 vEspTmp[cont] += _instance.GetPeso(obj); // Añadimos espacio usado al contenedor al que lo movemos
             }

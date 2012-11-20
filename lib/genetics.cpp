@@ -6,34 +6,24 @@ bool CompareSolucion (Solucion* s1, Solucion* s2){
 }
 
 // Algoritmo genetico
-// TODO: Usar AVERAGE para detener el proceso cuando no se mejora más
 Solucion* Genetics::AG(uint16_t maxGen){
     uint16_t t = 0;  // Generacion actual
     vector<Solucion* > poblacion;
-    //float average = 0.0; // Promedio de huecos de la poblacion actual
 
     // Generamos la poblacion inicial
     for (uint16_t i = 0; i < POBLACION_SIZE; i++)
         poblacion.push_back(GeneraSolucionInicialRandom());
-
-    //average = EvaluaPoblacion(poblacion);
-
     // Seleccionamos las BEST_COUNT mejores de la poblacion inicial
     vector<Solucion* > nextGen = SeleccionaMejores(poblacion);
     while (t < maxGen){
         // Selecciona COUPLES_NUMBER, las cruza y muta MUTANTS soluciones hijas
-        //cout << "Gen: " << t << endl; // DEBUG
         vector<Solucion* > descendientes = Operar(nextGen);
-
-        //cout << "Desendencia: " << descendientes.size() << endl; // DEBUG
-        //average = EvaluaPoblacion(descendientes);
         // Volvemos a seleccionas las BEST_COUNT mejores (en este caso de las hijas)
         nextGen.clear();
         nextGen = SeleccionaMejores(descendientes);
         t++;
     }
     sort(nextGen.begin(), nextGen.end(), CompareSolucion);
-    //cout << "Ultima generacion: " << nextGen.size() << endl; // DEBUG
     return nextGen[0];
 
 }
@@ -63,22 +53,12 @@ vector<Solucion* > Genetics::Operar(vector<Solucion* > &s){
         descendientes.push_back(hijos.first);
         descendientes.push_back(hijos.second);
     }
-
-    //cout << "Descendientes tras cruce: " << descendientes.size() << endl; // DEBUG
-
-    // DEBUG
-    for (uint16_t i = 0; i < descendientes.size(); i++){
-        //cout << "[" << i << "] " << *descendientes[i] << endl;
-    }
-    // DEBUG
-
     srand ( time(NULL) + rand() ); // Inicializamos la semilla del RANDOM
     for (int16_t m = 0; m < MUTANTS; m++){  // Mutamos MUTANTS soluciones al azar
         uint16_t i = rand() % descendientes.size();
         Solucion mutante = Mutar(descendientes[i]);
         descendientes[i] = &mutante;
     }
-
     return descendientes;
 }
 
@@ -104,25 +84,16 @@ pair<Solucion*, Solucion* > Genetics::Cruzar(pair<Solucion*, Solucion* > &pareja
     vector<uint16_t> vs1 = pareja.first->GetVectorSolucion();
     vector<uint16_t> vs2 = pareja.second->GetVectorSolucion();
 
-    //cout << "CRUZANDO:" << endl << endl << *pareja.first << endl << " con " << endl << endl << *pareja.second << endl;
-
     srand ( time(NULL) + rand() ); // Inicializamos la semilla del RANDOM
     uint16_t j = rand() % vs1.size();  // Seleccionamos una posicion al azar dentro del vector solucion
-
-    //cout << " punto de cruce = " << j << endl; // DEBUG
-
-    for (uint16_t i = 0; i < j; i++){
+    for (uint16_t i = 0; i < j; i++){  // Realizamos el cruce de vectores solucion
         uint16_t tmp = vs1[i];
         vs1[i] = vs2[i];
         vs2[i] = tmp;
     }
-    //cout << vs1.size() << ", " << _instance.GetCapacidadC() << endl; // DEBUG
     Solucion* nSol = new Solucion(vs1, _instance.GetCapacidadC(), *_instance.GetPesos());
-    //cout << "Primer CRUCE:" << *nSol << endl; // DEBUG
     result.first = nSol;
     nSol = new Solucion(vs2, _instance.GetCapacidadC(), *_instance.GetPesos());
-    //cout << "Segundo CRUCE:" << *nSol << endl; // DEBUG
-    result.first = nSol;
     result.second = nSol;
 
     return result;
@@ -136,15 +107,11 @@ Solucion Genetics::Mutar(Solucion* sol){
     if ((result.GetNumObjetos() > 0) && (result.GetNumContenedores() > 0)){
         uint16_t i = rand() % result.GetNumObjetos();  // Objeto aleatorio del vector solucion
         uint16_t j = rand() % result.GetNumContenedores();  // Contenedor aleatorio
-        //cout << "MuTANDO: " << i << " pasa a " << j << endl; // DEBUG
+
         result.SetSolucion(j, i);  // El objeto 'i' muta y pasa al contenedor 'j'
         result.SetEspacio(result.VectorEspacios(j) - _instance.GetPeso(i), j);
-
-        //cout << result << endl;  // DEBUG
-        if (result.Factible(_instance.GetCapacidadC(), *_instance.GetPesos())){
+        if (result.Factible(_instance.GetCapacidadC(), *_instance.GetPesos()))
             result = *sol;
-            //cout << "FACTIBLE:" << endl << result << endl;  // DEBUG
-        }
     }
 
     return result;

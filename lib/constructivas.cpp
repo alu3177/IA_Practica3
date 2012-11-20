@@ -15,12 +15,10 @@ Solucion* Constructivas::GRASP (uint16_t t){
     srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
     while (!FullyExplored(pesos)){
         lrc = GetListaRestringidaCandidatos(pesos, contenedores, t);
-        //cout << "LRC size = " << lrc.size() << endl; // DEBUG
         if (lrc.size() > 0){
             // Elegimos un elemento aleatorio de LRC
             uint16_t i = rand() % lrc.size();
             Candidato paso = lrc[i];
-            //cout << "INSERTANDO objeto " << paso.oID << " en contenedor " << paso.cID << endl; // DEBUG
             solucion[paso.oID] = paso.cID;
             contenedores[paso.cID]->usedSpace += pesos[paso.oID];
             sumPesos += pesos[paso.oID]; // Incrementamos el peso usado
@@ -31,7 +29,6 @@ Solucion* Constructivas::GRASP (uint16_t t){
             cont->c = _instance.GetCapacidadC();
             cont->usedSpace = 0;
             contenedores.push_back(cont);
-            //cout << "CREO contenedor " << cont->id << endl;  // DEBUG
         }
     }
 
@@ -42,6 +39,7 @@ Solucion* Constructivas::GRASP (uint16_t t){
 }
 
 // Obtiene la Lista Restringida de Candidatos
+// Devuelve una lista con los 't' mejores pasos candidatos
 vector<Candidato> Constructivas::GetListaRestringidaCandidatos(vector<uint16_t> &pesos, vector<Contenedor* > &contenedores, uint16_t t){
     vector<Candidato> candidatos;  // Vector con todos los pasos candidatos
 
@@ -51,7 +49,6 @@ vector<Candidato> Constructivas::GetListaRestringidaCandidatos(vector<uint16_t> 
         Candidato bestCandidato;  // Mejor paso candidato
         bestCandidato.oID = i;
         bestCandidato.freeSpace = _instance.GetCapacidadC();
-        //uint16_t bestFreeSpace = _instance.GetCapacidadC(); // Espacio dejado en dicho contenedor ('bestCont')
         if (pesos[i] != EXPLOREDWEIGHT){  // Nos aseguramos de comprobar sólo para objetos sin contenedor asociado
             for (uint16_t j = 0; j < contenedores.size(); j++){ // Recorremos contenedores
                 uint16_t freespace = contenedores[j]->c - contenedores[j]->usedSpace; // Espacio libre en 'j' actualmente

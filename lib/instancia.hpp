@@ -53,13 +53,13 @@ class Instancia {
             o << "Capacidad de los contenedores: " << ins.GetCapacidadC() << endl;
             o << "Número de objetos:             " << ins.GetNumObjetos() << endl;
             o << "Mejor número de contenedores:  " << C_GREEN << ins.GetMejorNumContenedores() << C_DEFAULT << endl;
-            /*
-            for (uint16_t i = 0; i < ins.GetPesos()->size(); i++){
-                o << "[" << i << "]" << C_CYAN << ins.GetPesos()->at(i) << C_DEFAULT;
-                if (i < ins.GetPesos()->size() - 1)
-                    o << ", ";
+            if (VERBOSE){
+                for (uint16_t i = 0; i < ins.GetPesos()->size(); i++){
+                    o << "[" << i << "]" << C_CYAN << ins.GetPesos()->at(i) << C_DEFAULT;
+                    if (i < ins.GetPesos()->size() - 1)
+                        o << ", ";
+                }
             }
-            */
             return o;
         }
 

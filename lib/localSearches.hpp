@@ -12,17 +12,12 @@ const uint16_t MAXITERATIONS = 350;  // Numero maximo de iteraciones (Usado en T
 const uint16_t VNS_K = 8;
 const uint16_t TS_T = 5;
 
-extern Solucion* GeneraSolucionInicialRandom(Instancia* ins);
-extern Solucion* GeneraSolucionPrimeroQuepa(Instancia* ins, bool ordena = false);
-
 class LocalSearches : public BaseClass {
     public:
         LocalSearches(Instancia &ins) : BaseClass(ins) {}
 
         // Búsqueda Local Iterada
         Solucion* ILS();
-        // Búsqueda Local Iterada
-        Solucion* ILS2();
 
         // Simulated Annealing (Recocido simulado)
         //      Cuanto menor sea DEFAULTSTEP más ciclos se generaran

@@ -5,9 +5,6 @@
 #ifndef GENETICS_H
 #define GENETICS_H
 
-extern bool CompareSolucion (Solucion* s1, Solucion* s2);
-extern Solucion* GeneraSolucionInicialRandom(Instancia* ins);
-
 #define MAXGENERATIONS 70     // Numero maximo de generaciones
 #define POBLACION_SIZE 100    // Tamaño de la poblacion inicial
 #define COUPLES_NUMBER 100    // Numero de parejas formadas en cada generacion

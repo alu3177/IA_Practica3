@@ -5,12 +5,15 @@
 
 using namespace std;
 
-extern bool InVector (vector<Solucion* >&, Solucion*);
+extern bool InVector (vector<Solucion* > &vin, Solucion* sol, uint16_t capacidad);
+extern bool FullyExplored (vector<uint16_t> &v);
 extern uint16_t GetMayor(vector<uint16_t> &vin);
 extern uint16_t Sum(vector<uint16_t> &vin);
 
 #ifndef BASECLASS_H
 #define BASECLASS_H
+
+#define EXPLOREDWEIGHT 0    // Marca para indicar que se ha introducido dicho objeto en algun contenedor
 
 /*
  * Clase base utilizada para implementar las clases que aglutinan las
@@ -23,6 +26,14 @@ class BaseClass{
     protected:
         Instancia _instance;
 
+            /* GENERADORES DE SOLUCIONES */
+        // Instroduce cada objeto en el primer contenedor donde quepa
+        Solucion* GeneraSolucionPrimeroQuepa(bool ordena = false);
+
+        // Mete un objeto aleatorio en el primer contenedor que cabe
+        Solucion* GeneraSolucionInicialRandom();
+
+            /* MANEJO DE VECINAS */
         // Devuelve la mejor solucion vecina genrada
         Solucion* GeneraMejorVecina (Solucion* sIn);
 

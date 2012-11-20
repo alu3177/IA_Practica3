@@ -1,5 +1,10 @@
 #include "genetics.hpp"
 
+// Metodo utilizado para ordenar de menor a mayor (espacio dejado) soluciones en std::sort
+bool CompareSolucion (Solucion* s1, Solucion* s2){
+    return (s1->GetEspacioLibre() < s2->GetEspacioLibre());
+}
+
 // Algoritmo genetico
 // TODO: Usar AVERAGE para detener el proceso cuando no se mejora más
 Solucion* Genetics::AG(uint16_t maxGen){
@@ -8,7 +13,7 @@ Solucion* Genetics::AG(uint16_t maxGen){
     //float average = 0.0; // Promedio de huecos de la poblacion actual
 
     for (uint16_t i = 0; i < POBLACION_SIZE; i++)
-        poblacion.push_back(GeneraSolucionInicialRandom(&_instance));
+        poblacion.push_back(GeneraSolucionInicialRandom());
 
     //average = EvaluaPoblacion(poblacion);
 

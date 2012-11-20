@@ -7,7 +7,7 @@ using namespace std;
 Solucion* LocalSearches::ILS(){
     uint32_t maxIteraciones = 100;
     uint32_t iter = 0;
-    Solucion* actual = GeneraSolucionInicialRandom(&_instance);
+    Solucion* actual = GeneraSolucionInicialRandom();
     Solucion* vecina = NULL;
     Solucion* mejorSol = actual;
 
@@ -20,29 +20,7 @@ Solucion* LocalSearches::ILS(){
                 break;
         }
         iter++;
-        actual = GeneraSolucionInicialRandom(&_instance);
-    }
-    return mejorSol;
-}
-
-// Búsqueda Local Iterada
-Solucion* LocalSearches::ILS2(){
-    bool seguir = true;
-    uint32_t maxIteraciones = 2; // Usamos 2 puesto que observando el algoritmo se dedujo que no se producirán mas de dos conjuntos de vecinas distintos.
-    uint32_t iter = 0;
-    Solucion* actual = GeneraSolucionPrimeroQuepa(&_instance, true);
-    Solucion* mejorSol = actual;
-
-    while (iter < maxIteraciones){
-        vector<Solucion* >* sols = GetVecinasMenosEspacio(actual);
-        //cout << "sols.size = " << sols->size() << endl; // DEBUG
-        for (uint16_t i = 0; i < sols->size(); i++){
-            if (*sols->at(i) <= *mejorSol){
-                actual = sols->at(i);
-                mejorSol = actual;
-            } else break;
-        }
-        iter++;
+        actual = GeneraSolucionInicialRandom();
     }
     return mejorSol;
 }
@@ -63,7 +41,7 @@ float LocalSearches::GetTemperatura (uint32_t t, float step){
 Solucion* LocalSearches::SA(){
     uint32_t iter = 1; // Numero de iteraciones
     float Temp = MAXTEMP;     // Temperatura actual
-    Solucion* actual = GeneraSolucionInicialRandom(&_instance);
+    Solucion* actual = GeneraSolucionInicialRandom();
     Solucion* siguiente;
     srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
     do{
@@ -104,7 +82,7 @@ Solucion* LocalSearches::SA(){
 Solucion* LocalSearches::SA2(uint16_t k){
     uint32_t iter = 1; // Numero de iteraciones
     float Temp = MAXTEMP;     // Temperatura actual
-    Solucion* actual = GeneraSolucionInicialRandom(&_instance);
+    Solucion* actual = GeneraSolucionInicialRandom();
     Solucion* siguiente;
     srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
     do{
@@ -141,7 +119,7 @@ Solucion* LocalSearches::SA2(uint16_t k){
 }
 
 Solucion* LocalSearches::VNS(uint16_t kMax){
-    Solucion* actual = GeneraSolucionInicialRandom(&_instance);
+    Solucion* actual = GeneraSolucionInicialRandom();
     Solucion* vecina = actual;
     uint16_t k = 1;
     do{
@@ -168,8 +146,8 @@ void LocalSearches::ActualizaTabu(vector<Solucion* > &vin, Solucion* nSol, uint1
 }
 
 Solucion* LocalSearches::TS(uint16_t tMax){
-    Solucion* actual = GeneraSolucionInicialRandom(&_instance);
-    //Solucion* actual = GeneraSolucionPrimeroQuepa(&_instance, true);
+    Solucion* actual = GeneraSolucionInicialRandom();
+    //Solucion* actual = GeneraSolucionPrimeroQuepa();
     Solucion* mejorSol = actual;
     Solucion* vecina;
     vector<Solucion* > tabu;

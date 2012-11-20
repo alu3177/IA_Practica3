@@ -47,10 +47,6 @@ class Problema {
                     solucion = local->ILS();
                     cout << *solucion;
 
-                    cout << "-- ILS 2: " << endl;
-                    solucion = local->ILS2();
-                    cout << *solucion;
-
                     cout << "-- SA 1: " << endl;
                     solucion = local->SA();
                     cout << *solucion;
@@ -74,10 +70,6 @@ class Problema {
 
                     cout << "-- ILS 1: " << endl;
                     solucion = local->ILS();
-                    cout << *solucion;
-
-                    cout << "-- ILS 2: " << endl;
-                    solucion = local->ILS2();
                     cout << *solucion;
 
                     cout << "-- SA 1: " << endl;
@@ -154,14 +146,9 @@ class Problema {
                     local = new LocalSearches(*_instances->at(i));
                     cons = new Constructivas(*_instances->at(i));
                     gen = new Genetics(*_instances->at(i));
-
+/*
                     cout << C_BLUE << "-- ILS 1: " << C_DEFAULT << endl;
                     solucion = local->ILS();
-                    cout << *solucion;
-                    delete(solucion);
-
-                    cout << C_BLUE << "-- ILS 2: " << C_DEFAULT << endl;
-                    solucion = local->ILS2();
                     cout << *solucion;
                     delete(solucion);
 
@@ -170,16 +157,16 @@ class Problema {
                     cout << *solucion;
                     delete(solucion);
 
-                    cout << C_BLUE << "-- SA 2: " << C_DEFAULT << endl;
-                    solucion = local->SA2();
-                    cout << *solucion;
-                    delete(solucion);
+                    //cout << C_BLUE << "-- SA 2: " << C_DEFAULT << endl;
+                    //solucion = local->SA2();
+                    //cout << *solucion;
+                    //delete(solucion);
 
                     cout << C_BLUE << "-- VNS 1: " << C_DEFAULT << endl;
                     solucion = local->VNS();
                     cout << *solucion;
                     delete(solucion);
-
+*/
                     cout << C_BLUE << "-- TS 1: " << C_DEFAULT << endl;
                     solucion = local->TS();
                     cout << *solucion;
@@ -208,10 +195,6 @@ class Problema {
 
                 cout << C_BLUE << "-- ILS 1: " << C_DEFAULT << endl;
                 solucion = local->ILS();
-                cout << *solucion;
-
-                cout << C_BLUE << "-- ILS 2: " << C_DEFAULT << endl;
-                solucion = local->ILS2();
                 cout << *solucion;
 
                 cout << C_BLUE << "-- SA 1: " << C_DEFAULT << endl;
@@ -264,10 +247,6 @@ class Problema {
                             i++;
                         }
                         _nInstancias = atoi(buff2);
-
-                        //cout << "_nInstancias = " << _nInstancias << endl;   // DEBUG
-                        //cout << "buff = " << buff << endl;   // DEBUG
-
                         haveInstances = true;
                         buff.clear();
                         ResetChar(buff2, BUFFSIZE);
@@ -279,17 +258,12 @@ class Problema {
                             // Si ya estábamos leyendo otra instancia, la almacenamos antes de crear una nueva
                             _instances->push_back(ins);
                             haveData = false; // No disponemos de los datos de la nueva instancia
-                            //cout << *ins << endl;   // DEBUG (mostramos la instancia generada)
                         }else
                             enInstancia = true;
                         // Creamos nueva instancia con el nombre almacenado en 'buff' menos el primer caracter (SEPARADOR)
                         ins = new Instancia(buff.substr(1, buff.size() - 1));
-                        //cout << "ins->GetName() = " << ins->GetName() << endl;  // DEBUG
-                        //cout << "Instancia: " << buff << endl;  // DEBUG
-
                     // Línea con los datos de la instancia
                     } else if ((enInstancia) && (!haveData)) {
-                        //uint16_t i = 0; // Iterador de 'buff'
                         uint16_t j = 0; // Iterador de 'buff2'
                         uint16_t c = 0, n = 0, best = 0; // Datos de la instancia
                         while (i <= buff.size()){
@@ -299,22 +273,18 @@ class Problema {
                                 buff2[j] = buff[i];
                                 j++;
                             // Usar el número leído
-                            }else if ((!IsEmpty(buff2, BUFFSIZE))/* || (i >= buff.size() - 1)*/){
-                                //cout << "buff2 : " << buff2 << endl;  // DEBUG
+                            }else if (!IsEmpty(buff2, BUFFSIZE)){
                                 if ( c == 0 ){
-                                    //cout << " c << " << buff2 << endl;   // DEBUG
                                     c = atoi(buff2);
                                     ins->SetCapacidadC(c);
                                     ResetChar (buff2, BUFFSIZE);
                                     j = 0;
                                 }else if ( n == 0 ){
-                                    //cout << " n << " << buff2 << endl;   // DEBUG
                                     n = atoi(buff2);
                                     ins->SetNumObjetos(n);
                                     ResetChar (buff2, BUFFSIZE);
                                     j = 0;
                                 }else if ( best == 0 ){
-                                    //cout << " best << " << buff2 << endl;   // DEBUG
                                     best = atoi(buff2);
                                     ins->SetMejorNumContenedores(best);
                                     ResetChar (buff2, BUFFSIZE);
@@ -333,10 +303,8 @@ class Problema {
                             i++;
                         }
                         ins->AddPeso(atoi(buff2));
-                        //cout << "w = " << atoi(buff2) << endl;  // DEBUG
                     }
                 }
-                //cout << *ins << endl;   // DEBUG (mostramos la última instancia generada)
             }
         }
 

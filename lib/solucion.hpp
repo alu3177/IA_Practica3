@@ -17,6 +17,7 @@ extern uint16_t GetPosicionMayor(vector<uint16_t> &vin);
 extern uint16_t GetMenor(vector<uint16_t> &vin);
 extern uint16_t GetPosicionMenor(vector<uint16_t> &vin);
 extern void InitVector (vector<uint16_t> &vin);
+extern uint16_t Sum(vector<uint16_t> &vin);
 
 struct Contenedor{
     uint16_t id;    // ID del contendor
@@ -172,6 +173,19 @@ class Solucion{
 
         }
 
+        // Valor objetivo auxiliar. Promedio de los cuadrados de los huecos de los contenedores
+        float ObjetivoAux(uint16_t capacidad){
+            if (_nContenedores > 0){
+                vector<uint16_t> espacios;  // Vector con los espacios libres en cada contenedor
+
+                for (uint16_t i = 0; i < _vectorEspacios.size(); i++)
+                    espacios.push_back(capacidad - _vectorEspacios[i]);
+
+                return Sum(espacios) / _nContenedores;
+            }
+            return 0.0;
+        }
+
         // GETTERS
         inline vector<uint16_t> GetVectorSolucion() { return _vectorSolucion; }
         inline vector<uint16_t> GetVectorEspacios() { return _vectorEspacios; }
@@ -208,16 +222,17 @@ class Solucion{
 
         // SOBRECARGA DE OPERADORES
         friend ostream& operator << (ostream &o, Solucion &sol){
-/*
-            o << "Vector Solucion: [ ";
-            for (uint16_t i = 0; i < sol.GetVectorSolucion().size(); i++)
-                o << sol.GetVectorSolucion()[i] << " ";
-            o << "]" << endl;
-            o << "Vector de Espacios: [ ";
-            for (uint16_t i = 0; i < sol.GetVectorEspacios().size(); i++)
-                o << sol.GetVectorEspacios()[i] << " ";
-            o << "]" << endl;
-*/
+            if (VERBOSE){
+                o << "Vector Solucion: [ ";
+                for (uint16_t i = 0; i < sol.GetVectorSolucion().size(); i++)
+                    o << sol.GetVectorSolucion()[i] << " ";
+                o << "]" << endl;
+                o << "Vector de Espacios: [ ";
+                for (uint16_t i = 0; i < sol.GetVectorEspacios().size(); i++)
+                    o << sol.GetVectorEspacios()[i] << " ";
+                o << "]" << endl;
+            }
+
             o << "Numero de contenedores: " << C_BRED << sol.GetNumContenedores() << endl;
             o << C_DEFAULT << "Espacio Libre: " << C_BRED << sol.GetEspacioLibre() << C_DEFAULT << endl;
             return o;

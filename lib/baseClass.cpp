@@ -1,5 +1,98 @@
 #include "baseClass.hpp"
 
+// Metodo utilizado para ordenar de mayor a menor numeros en std::sort
+bool MayorAmenor (uint16_t i, uint16_t j){
+    return (i > j);
+}
+
+    /* GENERADORES DE SOLUCIONES */
+
+// Instroduce cada objeto en el primer contenedor donde quepa
+Solucion* BaseClass::GeneraSolucionPrimeroQuepa(bool ordena){
+    vector<Contenedor* > contenedores;
+    Contenedor* cont;
+    vector<uint16_t> pesos = *_instance.GetPesos();
+    vector<uint16_t> v_solucion;
+    bool insertado;  // Indica si se ha insertado el objeto 'i'
+    uint16_t sumPesos = 0; // Suma de los pesos insertados
+
+    if (ordena){
+        sort(pesos.begin(), pesos.end(), MayorAmenor);
+        _instance.SetPesos(pesos); // Persistimos los cambios en la instacia, para mantener la coherencia
+        //cout << "SORRRRRT" << endl << *ins << endl; // DEBUG
+    }
+
+    for (int i = 0; i < pesos.size(); i++){
+        insertado = false;
+        for (uint16_t j = 0; j < contenedores.size(); j++){ // Recorremos vector de contenedores
+            if ( pesos[i] <= (_instance.GetCapacidadC() - contenedores[j]->usedSpace) ){ // El objeto 'i' cabe en el contenedor 'j'
+                v_solucion.push_back(contenedores[j]->id);
+                contenedores[j]->usedSpace += pesos[i];
+                sumPesos += pesos[i]; // Restamos espacio libre
+                insertado = true;
+                 break;
+             }
+         }
+         if (!insertado){   // No lo hemos insertado (no cabe en ningun contenedor)
+             cont = new Contenedor;
+             cont->id = contenedores.size();
+             cont->c = _instance.GetCapacidadC();
+             cont->usedSpace = 0;
+             contenedores.push_back(cont);
+             i--;    // Evitamos avanzar de objeto (para introducirlo)
+        }
+    }
+    uint16_t freeSpace = (contenedores.size() * _instance.GetCapacidadC()) - sumPesos; // Establecemos el espacio libre (Total - sumPesos)
+    Solucion* result = new Solucion(v_solucion, contenedores, freeSpace);
+    return result;
+}
+
+// Mete un objeto aleatorio en el primer contenedor que cabe
+Solucion* BaseClass::GeneraSolucionInicialRandom(){
+    vector<Contenedor* > contenedores;
+    Contenedor* cont;
+    vector<uint16_t> pesos = *_instance.GetPesos();
+    vector<uint16_t> solucion(_instance.GetNumObjetos());
+    bool insertado;  // Indica si se ha insertado el objeto 'i'
+    uint16_t sumPesos = 0; // Suma de los pesos insertados
+    uint16_t i;     // Representa a cada objeto en el vector de pesos (el objeto 'i' tiene un peso 'pesos[i]')
+
+    srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
+    while (!FullyExplored(pesos)){
+        insertado = false;
+        i = rand() % _instance.GetNumObjetos();    // Seleccionamos un elemento al azar
+        if (pesos[i] != EXPLOREDWEIGHT){   // Hemos seleccionado un elemento no asignado
+            //cout << "Seleccionado " << i << endl; // DEBUG
+            for (uint16_t j = 0; j < contenedores.size(); j++){ // Recorremos vector de contenedores
+                if ( pesos[i] <= (contenedores[j]->c - contenedores[j]->usedSpace) ){ // El objeto 'i' cabe en el contenedor 'j'
+                    //cout << "INSERTANDO objeto " << i << " en contenedor " << j << endl; // DEBUG
+                    solucion[i] = contenedores[j]->id;
+                    contenedores[j]->usedSpace += pesos[i];
+                    sumPesos += pesos[i]; // Incrementamos el peso usado
+                    pesos[i] = EXPLOREDWEIGHT;  // "Sacamos" del vector de pesos al objeto 'i'
+                    insertado = true;
+                    break;
+                }
+            }
+            if (!insertado){   // No lo hemos insertado (no cabe en ningun contenedor)
+                cont = new Contenedor;
+                cont->id = contenedores.size();
+                cont->c = _instance.GetCapacidadC();
+                cont->usedSpace = 0;
+                contenedores.push_back(cont);
+                //cout << "CREO contenedor " << cont->id << endl;  // DEBUG
+            }
+        }
+    }
+    uint16_t freeSpace = (contenedores.size() * _instance.GetCapacidadC()) - sumPesos; // Establecemos el espacio libre (Total - sumPesos)
+    Solucion* result = new Solucion(solucion, contenedores, freeSpace);
+    //cout << "Creo solucion y salgo" << endl;
+    return result;
+}
+
+
+    /* MANEJO DE VECINAS */
+
 // Devuelve la mejor solucion vecina genrada
 Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn){
     vector<Solucion* > vecinas = *GetVecinasMenosEspacio(sIn);
@@ -20,9 +113,9 @@ Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu){
     Solucion* bestSol = sIn;
 
     for (uint16_t i = 0; i < vecinas.size(); i++){
-        if (*vecinas[i] <= *bestSol){
-            //cout << "MejorVecina, Mejora" << endl; // DEBUG
-            if (!InVector(tabu, vecinas[i])){
+        if (vecinas[i]->ObjetivoAux(_instance.GetCapacidadC()) < bestSol->ObjetivoAux(_instance.GetCapacidadC())){
+            cout << "MejorVecina, Mejora" << endl; // DEBUG
+            if (!InVector(tabu, vecinas[i], _instance.GetCapacidadC())){
                 bestSol = vecinas[i];
                 //cout << "Cojo uno" << endl; // DEBUG
             } //else

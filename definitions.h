@@ -7,3 +7,5 @@
 #define C_MAGENTA "\033[0;35m"
 #define C_BRED    "\033[1;31m"   // BOLD
 #define C_BGREEN  "\033[1;32m"   // BOLD
+
+#define VERBOSE     false

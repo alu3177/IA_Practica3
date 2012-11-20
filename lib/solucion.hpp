@@ -3,6 +3,7 @@
 #include <fstream>
 #include <algorithm>
 #include <iostream>
+#include <math.h>
 #include "../definitions.h"
 
 using namespace std;
@@ -53,6 +54,7 @@ class Solucion{
         }
 
         // Constructor a partir de un vector solucion, el vector de pesos y la capacidad de los contenedores
+        // Realiza un procedimiento voraz para generarla
         Solucion(vector<uint16_t> vSol, uint16_t capacidad, vector<uint16_t> pesos){
             if (vSol.size() > 0){
                 SetVectorSolucion (vSol);
@@ -173,27 +175,40 @@ class Solucion{
 
         }
 
+        // Valor objetivo
+        uint16_t Objetivo(){
+            return GetNumContenedores();
+        }
+
         // Valor objetivo auxiliar. Promedio de los cuadrados de los huecos de los contenedores
-        float ObjetivoAux(uint16_t capacidad){
+        double ObjetivoAux(uint16_t capacidad){
             if (_nContenedores > 0){
                 vector<uint16_t> espacios;  // Vector con los espacios libres en cada contenedor
 
-                for (uint16_t i = 0; i < _vectorEspacios.size(); i++)
+                for (uint16_t i = 0; i < _vectorEspacios.size(); i++){
+                    //cout << "espacios <= " << capacidad - _vectorEspacios[i] << endl; // DEBUG
                     espacios.push_back(capacidad - _vectorEspacios[i]);
+                }
 
-                return Sum(espacios) / _nContenedores;
+                //cout << "ObjetivoAux = " << Sum(espacios) << " / " << _nContenedores << "(" << espacios.size() << ", " << _vectorEspacios.size() << ", " << _nContenedores << ")" << endl; // DEBUG
+                return (pow(Sum(espacios), 2) / _nContenedores);
             }
             return 0.0;
         }
 
         // GETTERS
         inline vector<uint16_t> GetVectorSolucion() { return _vectorSolucion; }
+        inline uint16_t VectorSolucion(uint16_t i) { return _vectorSolucion[i]; }
         inline vector<uint16_t> GetVectorEspacios() { return _vectorEspacios; }
-        inline uint16_t GetNumContenedores() { return _nContenedores; }
+        inline uint16_t VectorEspacios(uint16_t j) { return _vectorEspacios[j]; }
+        inline uint16_t GetNumContenedores() { return _vectorEspacios.size(); }
         inline uint16_t GetNumObjetos() { return _vectorSolucion.size(); }
         inline uint16_t GetEspacioLibre() { return _espacioLibre; }
         // SETTERS
         inline void SetEspacioLibre(uint16_t s) { _espacioLibre = s; }
+        inline void SetNumContenedores(uint16_t n) { _nContenedores = n; }
+        inline void SetSolucion(uint16_t sol, uint16_t pos) { _vectorSolucion[pos] = sol; }
+        inline void SetEspacio(uint16_t esp, uint16_t pos) { _vectorEspacios[pos] = esp; }
 
         void SetVectorSolucion(vector<uint16_t> &v) {
             _vectorSolucion.clear();
@@ -216,9 +231,6 @@ class Solucion{
             }
         }
 
-        inline void SetNumContenedores(uint16_t n) { _nContenedores = n; }
-        inline void SetSolucion(uint16_t sol, uint16_t pos) { _vectorSolucion[pos] = sol; }
-        inline void SetEspacio(uint16_t esp, uint16_t pos) { _vectorEspacios[pos] = esp; }
 
         // SOBRECARGA DE OPERADORES
         friend ostream& operator << (ostream &o, Solucion &sol){
@@ -239,38 +251,6 @@ class Solucion{
         }
         bool operator < (Solucion &sol){ return ( (_nContenedores < sol.GetNumContenedores()) ); }
         bool operator <= (Solucion &sol){ return ( (_nContenedores <= sol.GetNumContenedores()) ); }
-        bool operator == (Solucion &sol){
-        /*
-             // Método estrictamente correcto de hacer el ==
-            if ( (_nContenedores == sol.GetNumContenedores()) && (_espacioLibre == sol.GetEspacioLibre()) \
-                && (_vectorSolucion.size() == sol.GetVectorEspacios().size()) && (_vectorEspacios.size() == sol.GetVectorEspacios().size()) ){
-
-                    for (uint16_t i = 0; i < _vectorSolucion.size(); i++){
-                        if (_vectorSolucion[i] != sol.GetVectorSolucion()[i])
-                            return false;
-                    }
-                    for (uint16_t i = 0; i < _vectorEspacios.size(); i++){
-                        if (_vectorEspacios[i] != sol.GetVectorEspacios()[i])
-                            return false;
-                    }
-
-                    return true;
-                }
-            return false;
-            */
-            /*
-            if ( (_nContenedores == sol.GetNumContenedores()) && (_espacioLibre == sol.GetEspacioLibre()) \
-                && (_vectorSolucion.size() == sol.GetVectorEspacios().size()) && (_vectorEspacios.size() == sol.GetVectorEspacios().size()) ){
-                    return true;
-                }
-                return false;
-            */
-
-            if (_nContenedores == sol.GetNumContenedores())
-                return true;
-            return false;
-
-        }
         int operator - (Solucion &sol){ return ( (_nContenedores - sol.GetNumContenedores()) ); }
 };
 #endif

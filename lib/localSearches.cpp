@@ -149,24 +149,21 @@ Solucion* LocalSearches::TS(uint16_t tMax){
     Solucion* actual = GeneraSolucionInicialRandom();
     //Solucion* actual = GeneraSolucionPrimeroQuepa();
     Solucion* mejorSol = actual;
-    Solucion* vecina;
     vector<Solucion* > tabu;
-    //bool seguir = true; // TODO: Poner condicion de parada de verdad
     uint16_t iter = 0;
 
     while (iter < MAXITERATIONS){
         actual = GeneraMejorVecina(actual, tabu);
         //cout << "Fin While 1" << endl; // DEBUG
         //cout << *actual << " < " << *mejorSol << endl; // DEBUG
-        if (*actual < *mejorSol){
+        if (actual->ObjetivoAux(_instance.GetCapacidadC()) < mejorSol->ObjetivoAux(_instance.GetCapacidadC())){
             mejorSol = actual;
-            //cout << C_CYAN << "      MEJORA" << C_DEFAULT << endl; // DEBUG
+            cout << C_CYAN << "      MEJORA" << C_DEFAULT << endl; // DEBUG
         }
         //cout << "Fin IF" << endl; // DEBUG
         ActualizaTabu(tabu, actual, tMax);
         //cout << "Fin Update Tabu" << endl; // DEBUG
         iter++;
-
         //cout << "ITER++" << endl; // DEBUG
     }
     return mejorSol;

@@ -92,7 +92,7 @@ Solucion* BaseClass::GeneraSolucionInicialRandom(){
 
 
     /* MANEJO DE VECINAS */
-
+/*
 // Devuelve la mejor solucion vecina genrada
 Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn){
     vector<Solucion* > vecinas = *GetVecinasMenosEspacio(sIn);
@@ -105,23 +105,100 @@ Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn){
     }
     return bestSol;
 }
+*/
+// Devuelve la mejor solucion vecina genrada
+Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn){
+    Solucion* mejor = sIn;
+    for (uint16_t i = 0; i < sIn->GetNumObjetos(); i++){  // Recorremos el vector solucion
+        uint16_t bestSpace = _instance.GetCapacidadC(); // Mejor "espacio libre" encontrado
+        for (uint16_t j = 0; j < sIn->GetNumContenedores(); j++){  // Recorremos el vector de espacios
+            uint16_t nSpace = sIn->VectorEspacios(j) + _instance.GetPeso(i);  // Espacio ocupado si se mueve 'i' al contenedor 'j'
+            if (nSpace <= _instance.GetCapacidadC()){  // Si 'i' cabe en 'j' lo comparamos con el mejor resultado
+                if (nSpace < bestSpace){  // Si es mejor, actualizamos el mejor resultado
+                    bestSpace = nSpace;
+                    uint16_t prevObj = mejor->Objetivo();  // Numero de contenedores de la anterior mejor solucion
+                    mejor = MoverObjeto(sIn, i, j);
+                    if (mejor->Objetivo() < prevObj){  // Si se ha eliminado un contenedor implica que es la mejor solucion
+                        return mejor;
+                    }
+                }
+            }
+        }
+    }
+    return mejor;
+}
 
+// Devuelve la mejor solucion vecina genrada teniendo en cuenta la lista 'tabu'
+// ** Usado por la Búsqueda Tabú **
+Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu){
+    Solucion* mejor = sIn;
+    for (uint16_t i = 0; i < sIn->GetNumObjetos(); i++){  // Recorremos el vector solucion
+        uint16_t bestSpace = _instance.GetCapacidadC(); // Mejor "espacio libre" encontrado
+        for (uint16_t j = 0; j < sIn->GetNumContenedores(); j++){  // Recorremos el vector de espacios
+            uint16_t nSpace = sIn->VectorEspacios(j) + _instance.GetPeso(i);  // Espacio ocupado si se mueve 'i' al contenedor 'j'
+            if (nSpace <= _instance.GetCapacidadC()){  // Si 'i' cabe en 'j' lo comparamos con el mejor resultado
+                if (nSpace < bestSpace){  // Si es mejor ...
+                    Solucion* sTemp = MoverObjeto(sIn, i, j);
+                    uint16_t capacidad = _instance.GetCapacidadC();
+                    if (!InVector(tabu, sTemp, capacidad)){
+                        bestSpace = nSpace;
+                        uint16_t prevObj = mejor->ObjetivoAux(capacidad);  // Numero de contenedores de la anterior mejor solucion
+                        mejor = sTemp;
+                        if (mejor->ObjetivoAux(capacidad) < prevObj){  // Si se ha eliminado un contenedor implica que es la mejor solucion
+                            return mejor;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return mejor;
+}
+
+/*
 // Devuelve la mejor solucion vecina genrada teniendo en cuenta la lista 'tabu'
 // ** Usado por la Búsqueda Tabú **
 Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu){
     vector<Solucion* > vecinas = *GetVecinasMenosEspacio(sIn);
     Solucion* bestSol = sIn;
 
+
+    cout << "Nº vecinas = " << vecinas.size() << endl; // DEBUG
     for (uint16_t i = 0; i < vecinas.size(); i++){
-        if (vecinas[i]->ObjetivoAux(_instance.GetCapacidadC()) < bestSol->ObjetivoAux(_instance.GetCapacidadC())){
-            cout << "MejorVecina, Mejora" << endl; // DEBUG
+        if (vecinas[i]->ObjetivoAux(_instance.GetCapacidadC()) <= bestSol->ObjetivoAux(_instance.GetCapacidadC())){
+            //cout << "MejorVecina, Mejora" << endl; // DEBUG
             if (!InVector(tabu, vecinas[i], _instance.GetCapacidadC())){
                 bestSol = vecinas[i];
-                //cout << "Cojo uno" << endl; // DEBUG
+                cout << "Cojo uno" << *bestSol << endl; // DEBUG
             } //else
               //  cout << "Descarto" << endl; // DEBUG
         }
     }
+
+    return bestSol;
+
+}
+*/
+// Devuelve una solucion vecina genrada al azar teniendo en cuenta la lista 'tabu'
+// ** Usado por la Búsqueda Tabú **
+Solucion* BaseClass::GeneraVecinaRandom (Solucion* sIn, vector<Solucion* > tabu){
+    //vector<Solucion* > vecinas = *GetVecinasMenosEspacio(sIn);
+    Solucion* bestSol = GetVecinaRandom(sIn);
+    uint16_t maxIt = 50;
+
+
+    //cout << "Nº vecinas = " << vecinas.size() << endl; // DEBUG
+    //for (uint16_t i = 0; i < vecinas.size(); i++){
+        //if (vecinas[i]->ObjetivoAux(_instance.GetCapacidadC()) <= bestSol->ObjetivoAux(_instance.GetCapacidadC())){
+            //cout << "MejorVecina, Mejora" << endl; // DEBUG
+            uint16_t i = 0;
+            while ((InVector(tabu, bestSol, _instance.GetCapacidadC())) && (i < maxIt)){
+                bestSol = GetVecinaRandom(sIn);
+                i++;
+            } //else
+              //  cout << "Descarto" << endl; // DEBUG
+        //}
+    //}
 
     return bestSol;
 
@@ -166,81 +243,6 @@ Solucion* BaseClass::GetVecinaRandom(Solucion* sIn, uint16_t k){
     return sol;
 }
 /*
-// Devuelve una solucion vecina (a profundidad k) escogida al azar entre las posibles
-Solucion* BaseClass::GetVecinaRandom(Solucion* sIn, uint16_t k){
-    Solucion* result = sIn;
-    if (k >= 1){
-        uint16_t i = 0;
-        srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
-        while (i < k){
-            //cout << i << " Solucion" << endl; // DEBUG
-            vector<Solucion* >* vecinas = GetVecinasMenosEspacio(result);
-            if (vecinas->size() > 0){
-                result = vecinas->at(rand() % vecinas->size());
-            }
-            i++;
-        }
-    }
-    return result;
-}
-*/
-/*
-// Devuelve una solucion vecina (a profundidad k) escogida al azar entre las posibles
-// La solucion inicial puede empeorar o mejorar indistintamente
-Solucion* BaseClass::GetVecinaRandom(Solucion sIn, uint16_t k){
-    Solucion* result = NULL;
-    vector<uint16_t> vSolTmp = sIn.GetVectorSolucion();
-    vector<uint16_t> vEspTmp = sIn.GetVectorEspacios();
-    //uint16_t nEspacioLibre = sIn.GetEspacioLibre(); // Nuevo espacio libre
-    srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
-    uint16_t i = rand() % vSolTmp.size();  // Objeto escogido al azar
-    bool movido = false;  // Indica si se ha movido el objeto 'i'
-
-    //cout << "GetVecinaRandom" << endl; // DEBUG
-
-        for (uint16_t j = 0; j < vEspTmp.size(); j++){ // Recorremos los contenedores
-            if (vSolTmp[i] != j){ // No comprobamos para el mismo contenedor
-                //cout << vSolTmp[i] <<  "!=" << j << endl; // DEBUG
-                uint16_t libre = _instance.GetCapacidadC() - vEspTmp[j]; // Espacio libre en el contenedor 'j'
-                uint16_t prevCont = vSolTmp[i];
-                if ((_instance.GetPeso(i) < libre) && (vEspTmp[prevCont] >= _instance.GetPeso(i))){ // ¿Cabe? => Lo movemos y terminamos
-
-                    //cout << vEspTmp[prevCont] <<  "-" << _instance.GetPeso(i) << endl; // DEBUG
-                    vEspTmp[prevCont] -= _instance.GetPeso(i); // Descontamos espacio usado del contenedor del que lo sacamos
-                    //cout << "Moviendo objeto " << i << "(" << _instance.GetPeso(i) << ") de " << vSolTmp[i] << " a " << j <<  " [" << vEspTmp[j] << "]" << endl; // DEBUG
-                    vSolTmp[i] = j; // Cambiamos el objeto 'i' de contenedor 'j'
-                    vEspTmp[j] += _instance.GetPeso(i); // Añadimos espacio usado al contenedor al que lo movemos
-                    if (vEspTmp[prevCont] <= 0){  // Si se queda a cero, lo borramos
-                        BorrarContenedor(vSolTmp, vEspTmp, prevCont);
-                        //nEspacioLibre -= _instance.GetCapacidadC();
-                        //cout << "BORRANDO !!!!  " << prevCont << endl;  // DEBUG
-                    }
-                    movido = true;
-                    break; // Salimos del 'for'
-                }
-            }
-        }
-        if (!movido){  // 'i' no cabe en ningun 'j'  => Creamos nuevo contenedor
-            //cout << C_RED << "NO CUPO !" << C_DEFAULT << endl; // DEBUG
-            vSolTmp[i] = vEspTmp.size() - 1;  // Asociamos el objeto 'i' con el nuevo contenedor (con ID size - 1)
-            vEspTmp.push_back(vEspTmp.size() - 1);  // Añadimos un nuevo contenedor (su ID será igual a size - 1)
-            //nEspacioLibre += _instance.GetCapacidadC() - _instance.GetPeso(i);  // Actualizamos el espacio libre
-            //cout << "AÑADIENDO ! ! !  " << vSolTmp[i] << endl;  // DEBUG
-        }
-
-    int nEspacioLibre = (vEspTmp.size() * _instance.GetCapacidadC()) - Sum(vEspTmp); // (Numero de contenedores * Capacidad) - Sumatorio(vectorEspacios)
-    if (nEspacioLibre < 0)
-        nEspacioLibre = 0;
-
-    result = new Solucion(vSolTmp, vEspTmp, nEspacioLibre);
-    result->RepairOverLoad(_instance.GetCapacidadC(), *_instance.GetPesos());
-    if (k > 1){
-        result = GetVecinaRandom(*result, k - 1);
-    }
-    //cout << C_CYAN << *result << C_DEFAULT << endl;
-    return result;
-}
-*/
 // Calcula el conjunto de las soluciones vecinas posibles
 // haciendo un movimiento (al primer contenedor donde deje menos espacio)
 vector<Solucion* >* BaseClass::GetVecinasMenosEspacio(Solucion* sIn){
@@ -275,7 +277,7 @@ vector<Solucion* >* BaseClass::GetVecinasMenosEspacio(Solucion* sIn){
     //cout << "[FIN]  GetVecinasMenosEspacio" << endl; // DEBUG
     return result;
 }
-
+*/
 // Mueve el objeto en la posición 'obj' (dentro del vector solución),
 // al contenedor 'cont'. Refresca todos los valores afectados
 // Es decir, sIn->Solucion[obj] = cont

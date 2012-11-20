@@ -40,9 +40,11 @@ void InitVector (vector<uint16_t> &vin){
 bool InVector (vector<Solucion* > &vin, Solucion* sol, uint16_t capacidad){
     for (uint16_t i = 0; i < vin.size(); i++){
         if (vin[i]->ObjetivoAux(capacidad) == sol->ObjetivoAux(capacidad)){
+            //cout << vin[i]->ObjetivoAux(capacidad) << " == " << sol->ObjetivoAux(capacidad) << endl; // DEBUG
             return true;
         }
     }
+    //cout << " != " << endl; // DEBUG
     return false;
 }
 

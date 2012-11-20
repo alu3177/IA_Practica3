@@ -146,7 +146,7 @@ class Problema {
                     local = new LocalSearches(*_instances->at(i));
                     cons = new Constructivas(*_instances->at(i));
                     gen = new Genetics(*_instances->at(i));
-/*
+
                     cout << C_BLUE << "-- ILS 1: " << C_DEFAULT << endl;
                     solucion = local->ILS();
                     cout << *solucion;
@@ -166,7 +166,7 @@ class Problema {
                     solucion = local->VNS();
                     cout << *solucion;
                     delete(solucion);
-*/
+
                     cout << C_BLUE << "-- TS 1: " << C_DEFAULT << endl;
                     solucion = local->TS();
                     cout << *solucion;

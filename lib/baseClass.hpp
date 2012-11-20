@@ -40,6 +40,10 @@ class BaseClass{
         // Devuelve la mejor solucion vecina genrada teniendo en cuenta la lista 'tabu'
         Solucion* GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu);
 
+        // Devuelve una solucion vecina genrada al azar teniendo en cuenta la lista 'tabu'
+        // ** Usado por la Búsqueda Tabú **
+        Solucion* GeneraVecinaRandom (Solucion* sIn, vector<Solucion* > tabu);
+
         // Devuelve una solucion vecina escogida al azar entre las posibles
         Solucion* GetVecinaRandom(Solucion* sIn);
 
@@ -48,7 +52,7 @@ class BaseClass{
 
         // Calcula el conjunto de las soluciones vecinas posibles
         // haciendo un movimiento (al primer contenedor donde deje menos espacio)
-        vector<Solucion* >* GetVecinasMenosEspacio(Solucion* sIn);
+        //vector<Solucion* >* GetVecinasMenosEspacio(Solucion* sIn);
 
     private:
         // Mueve el objeto en la posición 'obj' (dentro del vector de pesos o el vector solución),

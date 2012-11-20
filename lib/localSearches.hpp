@@ -8,7 +8,7 @@ using namespace std;
 const uint16_t MAXTEMP = 1000;   // Temperatura maxima inicial para el SA
 const float DEFAULTSTEP = 0.133;  // Con 0.333 se obtienen valores mediocres en un tiempo aceptable
                                   // Con 0.133 se obtienen valores aceptables en un tiempo mediocre
-const uint16_t MAXITERATIONS = 350;  // Numero maximo de iteraciones (Usado en TS)
+const uint16_t MAXITERATIONS = 150;  // Numero maximo de iteraciones (Usado en TS)
 const uint16_t VNS_K = 8;
 const uint16_t TS_T = 5;
 

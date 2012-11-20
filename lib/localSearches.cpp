@@ -53,7 +53,7 @@ Solucion* LocalSearches::SA(){
 
         siguiente = GetVecinaRandom(actual);
         //cout << "Siguiente" << endl; // DEBUG
-        int delta = *siguiente - *actual;  // Gradiente entre siguiente y actual
+        int delta = siguiente->Objetivo() - actual->Objetivo();  // Gradiente entre siguiente y actual
         //cout << "Definido delta" << endl; // DEBUG
         if (delta >= 0){
             //cout << "Delta >= 0" << endl; // DEBUG
@@ -118,6 +118,7 @@ Solucion* LocalSearches::SA2(uint16_t k){
     return actual;
 }
 
+// Busqueda por ENTORNO VARIABLE
 Solucion* LocalSearches::VNS(uint16_t kMax){
     Solucion* actual = GeneraSolucionInicialRandom();
     Solucion* vecina = actual;
@@ -125,13 +126,11 @@ Solucion* LocalSearches::VNS(uint16_t kMax){
     do{
         vecina = GetVecinaRandom(actual, k);
         vecina = Greedy(vecina);
-        if (*vecina < *actual){
-            //cout << "VNS GOOT" << endl; // DEBUG
+        if (vecina->Objetivo() < actual->Objetivo()){
             actual = vecina;
             k = 1;
         }else{
             k++;
-            //cout << "VNS BAAD" << endl; // DEBUG
         }
     }while (k <= kMax);
     return actual;
@@ -145,6 +144,7 @@ void LocalSearches::ActualizaTabu(vector<Solucion* > &vin, Solucion* nSol, uint1
         vin.erase(vin.begin());
 }
 
+// Busqueda TABU
 Solucion* LocalSearches::TS(uint16_t tMax){
     Solucion* actual = GeneraSolucionInicialRandom();
     //Solucion* actual = GeneraSolucionPrimeroQuepa();

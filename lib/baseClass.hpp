@@ -13,6 +13,8 @@ extern uint16_t Sum(vector<uint16_t> &vin);
 #ifndef BASECLASS_H
 #define BASECLASS_H
 
+const float CHANCE = 0.99;  // Probabilidad de aceptar (y reparar) una "no factible" al generar vecinas random
+
 #define EXPLOREDWEIGHT 0    // Marca para indicar que se ha introducido dicho objeto en algun contenedor
 
 /*
@@ -49,10 +51,6 @@ class BaseClass{
 
         // Devuelve una solucion vecina (a profundidad k) escogida al azar entre las posibles
         Solucion* GetVecinaRandom(Solucion* sIn, uint16_t k);
-
-        // Calcula el conjunto de las soluciones vecinas posibles
-        // haciendo un movimiento (al primer contenedor donde deje menos espacio)
-        //vector<Solucion* >* GetVecinasMenosEspacio(Solucion* sIn);
 
     private:
         // Mueve el objeto en la posición 'obj' (dentro del vector de pesos o el vector solución),

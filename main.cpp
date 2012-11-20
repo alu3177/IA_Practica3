@@ -45,9 +45,10 @@ int main (){
     cout << *ins << endl;
     Instancia inn = *ins;
     cout << inn << endl;
-
-    LocalSearches* local = new LocalSearches(inn);
-    cout << *local->SA() << endl;
+    Genetics* gen = new Genetics(inn);
+    cout << *gen->AG() << endl;
+//    LocalSearches* local = new LocalSearches(inn);
+//    cout << *local->SA() << endl;
 */
 
     return 0;

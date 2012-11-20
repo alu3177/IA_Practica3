@@ -63,7 +63,7 @@ class Solucion{
             _nContenedores = 0;
             _espacioLibre = 0;
             vector<uint16_t> contenedores;  // Vector con las IDs de los contenedores extraidas de vSol
-            for (uint16_t i = 0; i < _vectorSolucion.size(); i++){
+            for (uint16_t i = 0; i < GetNumObjetos(); i++){
                 if (!InVector(contenedores, _vectorSolucion[i])){
                     _nContenedores++;
                     contenedores.push_back(_vectorSolucion[i]);
@@ -82,7 +82,7 @@ class Solucion{
             }
 
             // Calculamos los valores de '_vectorEspacios'
-            for (uint16_t j = 0; j < _nContenedores; j++){ // Recorremos contenedores
+            for (uint16_t j = 0; j < contenedores.size(); j++){ // Recorremos contenedores
                 uint16_t usedSpaceCont = 0;  // Espacio usado en el contenedor actual 'j'
                 for (uint16_t i = 0; i < _vectorSolucion.size(); i++){  // Recorremos objetos
                     if (_vectorSolucion[i] == j){  // Objeto 'i' esta en contenedor 'j'?
@@ -102,14 +102,14 @@ class Solucion{
 
         // Repara la solucion para evitar la sobrecarga de capacidad de contenedores
         void RepairOverLoad(uint16_t capacidad, vector<uint16_t> pesos){
-            //cout << " OVERLOAD !!" << endl; // DEBUG
+            //cout << C_CYAN << " OVERLOAD !!" << C_DEFAULT << endl; // DEBUG
             //cout << C_CYAN << *this << endl; // DEBUG
             //while (!this->Factible(capacidad)){
             _espacioLibre = 0;
-            for (uint16_t j = 0; j < _nContenedores; j++){  // Recorremos contenedores (en el vector de espacios)
+            for (uint16_t j = 0; j < GetNumContenedores(); j++){  // Recorremos contenedores (en el vector de espacios)
                 if(_vectorEspacios[j] > capacidad){  // Se produce SobreCarga del contenedor 'j'
                     uint16_t nCap = 0;  // Nueva capacidad del contenedor
-                    for (uint16_t i = 0; i < _vectorSolucion.size(); i++){  // Recorremos el vector solucion buscando los asociados a 'j'
+                    for (uint16_t i = 0; i < GetNumObjetos(); i++){  // Recorremos el vector solucion buscando los asociados a 'j'
                         if (_vectorSolucion[i] == j){  // 'i' esta en 'j'
                             if ((nCap + pesos[i]) <= capacidad){  // Objeto 'i' cabe en 'j'
                                 nCap += pesos[i];
@@ -144,13 +144,12 @@ class Solucion{
 
         // Comprueba si la solucion es factible
         bool Factible(uint16_t capacidad){
-            if (_nContenedores != _vectorEspacios.size())
+            if (_nContenedores != _vectorEspacios.size()) // '_nContenedores' concuerda
                 return false;
-            for (uint16_t j = 0; j < _vectorEspacios.size(); j++){
+            for (uint16_t j = 0; j < GetNumContenedores(); j++){ //  Ningun contenedor sobrepasa 'capacidad'
                 if (_vectorEspacios[j] > capacidad)
                     return false;
             }
-
             return true;
         }
 

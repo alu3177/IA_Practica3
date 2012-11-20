@@ -7,6 +7,7 @@
 
 #define MAXGENERATIONS 70     // Numero maximo de generaciones
 #define POBLACION_SIZE 100    // Tamaño de la poblacion inicial
+#define BEST_COUNT     30     // Se escogeran las BEST_COUNT en cada generacion
 #define COUPLES_NUMBER 100    // Numero de parejas formadas en cada generacion
 #define MUTANTS        10     // Numero de descendientes que mutan
 class Genetics : public BaseClass {
@@ -28,7 +29,7 @@ class Genetics : public BaseClass {
         }
 */
         // Selecciona las 'n' mejores soluciones de 'pob'
-        vector<Solucion* > SeleccionaMejores(vector<Solucion* > pob, uint16_t n = 30);
+        vector<Solucion* > SeleccionaMejores(vector<Solucion* > pob, uint16_t n = BEST_COUNT);
 
         // Escoge COUPLES_NUMBER parejas de 's' y las cruza. Despues muta MUTANTS
         // elementos y devuelve la nueva generacion entera

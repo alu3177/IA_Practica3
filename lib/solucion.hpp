@@ -11,7 +11,7 @@
  *      Se dispone de una cantidad indeterminada de contenedores de
  *      capacidad C y n objetos de tamaños w1, w2, …, wn. Se trata de
  *      determinar el empaquetado de todos los objetos usando el menor
- *      número posible de contenedores m*. La suma de los tamaños de los
+ *      número posible de contenedores m. La suma de los tamaños de los
  *      objetos asignados a contenedor no puede sobrepasar la capacidad C.
  *
  *      Implementar los siguientes algoritmos:
@@ -46,21 +46,27 @@ extern uint16_t GetPosicionMenor(vector<uint16_t> &vin);
 extern void InitVector (vector<uint16_t> &vin);
 extern uint16_t Sum(vector<uint16_t> &vin);
 
+// Representa contenedores
 struct Contenedor{
     uint16_t id;    // ID del contendor
     uint16_t c;
     uint16_t usedSpace;  // Espacio usado (Si está lleno => usedSpace == c)
 };
 
+// Clase que implementa las soluciones y sus metodos asociados
 class Solucion{
     protected:
         vector<uint16_t> _vectorSolucion;
-        vector<uint16_t> _vectorEspacios;   // El espacio ocupado en cada contenedor (El contenedor 'i' tendrá '_vectorEspacios[i]' de espacio ocupado)
+        vector<uint16_t> _vectorEspacios;   // El espacio ocupado en cada contenedor
+                                            // (El contenedor 'i' tendrá '_vectorEspacios[i]' de espacio ocupado)
         uint16_t _nContenedores;
         uint16_t _espacioLibre;
 
     public:
-        // CONSTRUCTORES
+        /*
+         * CONSTRUCTORES
+         */
+
         Solucion(vector<uint16_t> vSol, vector<Contenedor* > vSpa, uint16_t e, uint16_t c = 0) : _nContenedores(c), _espacioLibre(e) {
             if (vSol.size() > 0)
                 SetVectorSolucion (vSol);
@@ -85,7 +91,8 @@ class Solucion{
             if (vSol.size() > 0){
                 SetVectorSolucion (vSol);
             }
-            // Obtenemos el numero de contenedores
+
+            // Obtenemos una lista de IDs de contenedores
             _nContenedores = 0;
             _espacioLibre = 0;
             vector<uint16_t> contenedores;  // Vector con las IDs de los contenedores extraidas de vSol
@@ -98,7 +105,7 @@ class Solucion{
 
             sort(contenedores.begin(), contenedores.end());
             // Comprobamos que los IDs de los contenedores sean correctos
-            // (Los Ids de contenedores del vector solucion pueden no ser consecutivos)
+            // (Los IDs de contenedores del vector solucion pueden no ser consecutivos)
             // El valor 'contenedores[i]' debe ser igual a 'i' tras haberlos ordenado
             for (uint16_t i = 0; i < contenedores.size(); i++){
                 if (contenedores[i] != i){
@@ -125,6 +132,10 @@ class Solucion{
             }
         }
 
+        /*
+         * METODOS
+         */
+
         // Repara la solucion para evitar la sobrecarga de capacidad de contenedores
         void RepairOverLoad(uint16_t capacidad, vector<uint16_t> pesos){
             _espacioLibre = 0;
@@ -143,7 +154,7 @@ class Solucion{
 
                                 }else{ // No cabe en ningun contenedor => Creamos uno
                                     _vectorEspacios.push_back(pesos[i]);  // Añadimos el dato al vector de espacios
-                                    _vectorSolucion[i] = _vectorEspacios.size() - 1;  // El ID del ultimo contenedor creado es igual al tamaño del vector - 1
+                                    _vectorSolucion[i] = _vectorEspacios.size() - 1;  // El ID del ultimo contenedor creado
                                     _vectorEspacios[j] -= pesos[i];
                                     _nContenedores++;
                                 }
@@ -166,7 +177,7 @@ class Solucion{
             return true;
         }
 
-        // Comprueba si la solucion es factible y si el vector solucion es valido
+        // Comprueba si la solucion es factible (tambien a nivel de "vector solucion VS vector pesos")
         bool Factible(uint16_t capacidad, vector<uint16_t> pesos){
             vector<uint16_t> vEspTmp(_vectorEspacios.size() + 1);
             InitVector(vEspTmp);
@@ -202,6 +213,10 @@ class Solucion{
             }
             return 0.0;
         }
+
+        /*
+         * GETTERS & SETTERS
+         */
 
         // GETTERS
         inline vector<uint16_t> GetVectorSolucion() { return _vectorSolucion; }
@@ -239,7 +254,9 @@ class Solucion{
         }
 
 
-        // SOBRECARGA DE OPERADORES
+        /*
+         * SOBRECARGA DE OPERADORES
+         */
         friend ostream& operator << (ostream &o, Solucion &sol){
             if (VERBOSE){
                 o << "Vector Solucion: [ ";
@@ -256,8 +273,6 @@ class Solucion{
             o << C_DEFAULT << "Espacio Libre: " << C_BRED << sol.GetEspacioLibre() << C_DEFAULT << endl;
             return o;
         }
-        bool operator < (Solucion &sol){ return ( (_nContenedores < sol.GetNumContenedores()) ); }
-        bool operator <= (Solucion &sol){ return ( (_nContenedores <= sol.GetNumContenedores()) ); }
-        int operator - (Solucion &sol){ return ( (_nContenedores - sol.GetNumContenedores()) ); }
+
 };
 #endif

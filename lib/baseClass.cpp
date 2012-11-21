@@ -31,7 +31,6 @@ bool MayorAmenor (uint16_t i, uint16_t j){
     return (i > j);
 }
 
-
     /* GENERADORES DE SOLUCIONES */
 
 // Instroduce cada objeto en el primer contenedor donde quepa
@@ -109,7 +108,6 @@ Solucion* BaseClass::GeneraSolucionInicialRandom(){
     }
     uint16_t freeSpace = (contenedores.size() * _instance.GetCapacidadC()) - sumPesos; // Establecemos el espacio libre (Total - sumPesos)
     Solucion* result = new Solucion(solucion, contenedores, freeSpace);
-    //cout << "Creo solucion y salgo" << endl;
     return result;
 }
 
@@ -128,7 +126,7 @@ Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn){
                     bestSpace = nSpace;
                     uint16_t prevObj = mejor->Objetivo();  // Numero de contenedores de la anterior mejor solucion
                     mejor = MoverObjeto(sIn, i, j);
-                    if (mejor->Objetivo() < prevObj){  // Si se ha eliminado un contenedor implica que es la mejor solucion
+                    if (mejor->Objetivo() < prevObj){  // Si se ha eliminado un contenedor implica que no se puede mejorar mas
                         return mejor;
                     }
                 }
@@ -170,7 +168,6 @@ Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu){
 Solucion* BaseClass::GetVecinaRandom(Solucion* sIn){
     Solucion* result = sIn;
     float chance;
-    uint32_t maxIter = 1200;
     uint32_t iter = 0;
 
     if ((CHANCE >= 0) && (CHANCE <= 1))
@@ -180,13 +177,15 @@ Solucion* BaseClass::GetVecinaRandom(Solucion* sIn){
     else if (CHANCE > 1)
         chance = 1;
     srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
-    while (iter < maxIter){
+    while (iter < MAXITER){
         uint16_t obj = rand() % sIn->GetNumObjetos();  // Objeto seleccionado al azar
         uint16_t cont = rand() % sIn->GetNumContenedores(); // Contenedor seleccionado al azar
         result = MoverObjeto(sIn, obj, cont);
         if (result->Factible(_instance.GetCapacidadC(), *_instance.GetPesos())){
+            // El movimiento es valido
             return result;
         }else{
+            // El movimiento es invalido. Probamos si lo aceptamos (y mejoramos) en funcion de 'chance'
             float prob = (float)rand()/(float)RAND_MAX; // Genera un numero entre 0.0 y 1.0
             if (prob <= chance){
                 result->RepairOverLoad(_instance.GetCapacidadC(), *_instance.GetPesos());
@@ -200,9 +199,9 @@ Solucion* BaseClass::GetVecinaRandom(Solucion* sIn){
 }
 
 // Devuelve una solucion vecina (a profundidad k) escogida al azar entre las posibles
-// K = 0 => Vecina directa
+// K = 1 => Vecina directa
 Solucion* BaseClass::GetVecinaRandom(Solucion* sIn, uint16_t k){
-    uint16_t profundidad = 0;
+    uint16_t profundidad = 1;  // El primer nivel de vecinas empieza en 1
     Solucion* sol = GetVecinaRandom(sIn);
     while (profundidad < k){
         sol = GetVecinaRandom(sol);
@@ -250,7 +249,7 @@ void BaseClass::BorrarContenedor(vector<uint16_t> &vSol, vector<uint16_t> &vEsp,
     }
     vEsp = vEspTmp;
     // Actualizamos los IDs de contenedor del vector solucion
-    // Restamos uno a todos los IDs de contenedor mayores que el que hemos borrado
+    // Restamos, uno a uno, todos los IDs de contenedor mayores que el que hemos borrado
     for (uint16_t i = 0; i < vSol.size(); i++){
         if (vSol[i] > pos)
             vSol[i]--;
@@ -262,10 +261,9 @@ void BaseClass::BorrarContenedor(vector<uint16_t> &vSol, vector<uint16_t> &vEsp,
 Solucion* BaseClass::Greedy(Solucion* &sIn){
     Solucion* actual = sIn;
     Solucion* vecina = sIn;
-    uint32_t maxIter = 500;
 
     uint32_t iter = 0;
-    while (iter < maxIter){
+    while (iter < MAXITER){
         vecina = GeneraMejorVecina(actual);
         if (vecina->Objetivo() < actual->Objetivo())
             actual = vecina;

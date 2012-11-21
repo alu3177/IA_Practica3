@@ -45,7 +45,9 @@ class Problema {
         vector<Instancia* >* _instances; // Puntero a, vector con punteros a las distintas instancias
 
     public:
-        // Constructor
+        /*
+         * CONSTRUCTOR
+         */
         Problema(uint16_t nI = 0, vector<Instancia* >* ins = NULL) : _nInstancias(nI) {
             if (ins != NULL)
                 _instances = ins;
@@ -53,10 +55,17 @@ class Problema {
                 _instances = new vector<Instancia* >;
         }
 
-        // Getters y Setters
+        /*
+         * GETTERS & SETTERS
+         */
         inline Instancia* GetInstancia(uint16_t pos) { return _instances->at(pos); }
         inline uint16_t GetNumeroInstancias() { return _instances->size(); }
 
+        /*
+         * METODOS
+         */
+
+        // Ejecuta la heuristica 'name' para la instancia 'ins' mostrando el resultado
         void RunHeuristic(string name, uint16_t ins){
             Solucion* solucion = NULL;
             if (ins < _nInstancias){
@@ -92,6 +101,7 @@ class Problema {
             }
         }
 
+        // Ejecuta la heuristica 'name' para la instancia 'ins' devolviendo el resultado
         Solucion* RunHeuristicQuiet(string name, uint16_t ins){
             Solucion* solucion = NULL;
             if (ins < _nInstancias){

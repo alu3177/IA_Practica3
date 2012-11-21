@@ -43,7 +43,9 @@ class Instancia {
         uint16_t _mejorNumCont;  // Mejor número de contenedores
         vector<uint16_t>* _pesos; // Puntero a, vector con los pesos de los elementos (El elemento 'i' pesa '_pesos[i]')
     public:
-        // Constructor
+        /*
+         * CONSTRUCTOR
+         */
         Instancia(string nam = "", uint16_t c = 0, uint16_t n = 0, uint16_t best = 0, vector<uint16_t>* w = NULL) : _name(nam), _capacidadC(c), _nObjetos(n), _mejorNumCont(best) {
             if (w != NULL)
                 _pesos = w;
@@ -51,10 +53,9 @@ class Instancia {
                 _pesos = new vector<uint16_t>;
         }
 
-        // Métodos
-        inline void AddPeso(uint16_t w) { _pesos->push_back(w); }
-
-        // GETTERS y SETTERS
+        /*
+         * GETTERS & SETTERS
+         */
         inline string GetName() { return _name; }
         inline uint16_t GetCapacidadC() { return _capacidadC; }
         inline uint16_t GetNumObjetos() { return _nObjetos; }
@@ -73,7 +74,14 @@ class Instancia {
                 _pesos->push_back(w[i]);
         }
 
-        // SobreCarga de Operadores
+        /*
+         * METODOS
+         */
+        inline void AddPeso(uint16_t w) { _pesos->push_back(w); }
+
+        /*
+         * SOBRECARGA DE OPERADORES
+         */
         friend ostream& operator << (ostream &o, Instancia &ins){
             o << "Instancia:                     " << C_BGREEN << ins.GetName() << C_DEFAULT << endl;
             o << "Capacidad de los contenedores: " << ins.GetCapacidadC() << endl;
@@ -88,19 +96,5 @@ class Instancia {
             }
             return o;
         }
-
-        friend bool operator == (Instancia &p, Instancia &p2){
-            return p2.GetName() == p.GetName() && p2.GetCapacidadC() == p.GetCapacidadC() && p2.GetMejorNumContenedores() == p.GetMejorNumContenedores() && p2.GetMejorNumContenedores() == p.GetMejorNumContenedores();
-        }
-
-        Instancia& operator = (Instancia &p){
-            this->_name = p.GetName();
-            this->_capacidadC = p.GetCapacidadC();
-            this->_nObjetos = p.GetNumObjetos();
-            this->_mejorNumCont = p.GetMejorNumContenedores();
-            this->_pesos = p.GetPesos();
-            return *this;
-        }
-
 };
 #endif

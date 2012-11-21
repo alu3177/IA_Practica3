@@ -34,7 +34,7 @@
 
 using namespace std;
 
-/* FUNCIONES AUXILIARES de manejo de char* */
+// Resetea 'str' (pone todos sus valores a 0)
 void ResetChar (char* str, uint16_t size){
    for (uint16_t i = 0; i < size; i++)
       str[i] = 0;

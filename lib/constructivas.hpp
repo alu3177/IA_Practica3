@@ -46,9 +46,13 @@ struct Candidato{
 
 class Constructivas : public BaseClass {
     public:
-        // Constructor
+        /*
+         * CONSTRUCTOR
+         */
         Constructivas(Instancia &ins) : BaseClass(ins) {}
-        // Heurísticas
+        /*
+         * METODOS (Coleccion de heuristicas)
+         */
         Solucion* GRASP(uint16_t t = GRASP_T);
 
     private:

@@ -31,15 +31,22 @@ using namespace std;
 #ifndef GLOBALSEARCHES_H
 #define GLOBALSEARCHES_H
 
-const float MAXTEMP = 5000;   // Temperatura maxima inicial para el SA
-const float DEFAULTSTEP = 0.333;  // Tamaño de los pasos para calcular la temeperatura en el SA
-const uint16_t MAXITERATIONS = 150;  // Numero maximo de iteraciones (Usado en TS e ILS)
-const uint16_t VNS_K = 8;
-const uint16_t TS_T = 5;
+const float MAXTEMP = 5000;         // Temperatura maxima inicial para el SA
+const float DEFAULTSTEP = 0.333;    // Tamaño de los pasos para calcular la temeperatura en el SA
+const uint16_t MAXITERATIONS = 150; // Numero maximo de iteraciones (Usado en TS e ILS)
+const uint16_t VNS_K = 8;           // Valor por defecto para 'k' del VNS
+const uint16_t TS_T = 5;            // Valor por defecto para 't' en TS
 
 class GlobalSearches : public BaseClass {
     public:
+        /*
+         * CONSTRUCTOR
+         */
         GlobalSearches(Instancia &ins) : BaseClass(ins) {}
+
+        /*
+         * METODOS (Coleccion de heuristicas)
+         */
 
         // Búsqueda Local Iterada
         Solucion* ILS();
@@ -48,12 +55,6 @@ class GlobalSearches : public BaseClass {
         //      Cuanto menor sea DEFAULTSTEP más ciclos se generaran
         //      Cuanto mayor sea MAXTEMP mayores serán las probabilidades de aceptación
         Solucion* SA();
-
-        // Simulated Annealing 2 (Recocido simulado modificado)
-        // Obtiene la vecina aleatoria a 'k' pasos de la actual
-        //      Cuanto menor sea DEFAULTSTEP más ciclos se generaran
-        //      Cuanto mayor sea MAXTEMP mayores serán las probabilidades de aceptación
-        Solucion* SA2(uint16_t k = 3);
 
         // Busqueda por Entorno Variable
         Solucion* VNS(uint16_t kMax = VNS_K);

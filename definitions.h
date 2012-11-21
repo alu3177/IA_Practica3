@@ -34,4 +34,6 @@
 #define C_BRED    "\033[1;31m"   // BOLD
 #define C_BGREEN  "\033[1;32m"   // BOLD
 
+// Modo VERBOSE: Si se activa se muestra mas informacion
+// al mostrar por pantalla las instancias y las soluciones
 #define VERBOSE     false

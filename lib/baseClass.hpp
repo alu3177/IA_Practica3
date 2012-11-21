@@ -42,6 +42,7 @@ extern uint16_t Sum(vector<uint16_t> &vin);
 const float CHANCE = 0.5;  // Probabilidad de aceptar (y reparar) una "no factible" al generar vecinas random
 
 #define EXPLOREDWEIGHT 0    // Marca para indicar que se ha introducido dicho objeto en algun contenedor
+#define MAXITER        1200 // Numero maximo de iteraciones permitidas
 
 /*
  * Clase base utilizada para implementar las clases que aglutinan las
@@ -49,10 +50,17 @@ const float CHANCE = 0.5;  // Probabilidad de aceptar (y reparar) una "no factib
 */
 class BaseClass{
     public:
+        /*
+         * CONSTRUCTOR
+         */
         BaseClass (Instancia &ins) : _instance(ins) {}
 
     protected:
         Instancia _instance;
+
+        /*
+         * METODOS (Coleccion de heuristicas)
+         */
 
             /* GENERADORES DE SOLUCIONES */
         // Instroduce cada objeto en el primer contenedor donde quepa

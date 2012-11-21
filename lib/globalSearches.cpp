@@ -92,53 +92,18 @@ Solucion* GlobalSearches::SA(){
     return actual;
 }
 
-// Simulated Annealing 2 (Recocido simulado modificado)
-// Obtiene la vecina aleatoria a 'k' pasos de la actual
-//      Cuanto menor sea DEFAULTSTEP más ciclos se generaran
-//      Cuanto mayor sea MAXTEMP mayores serán las probabilidades de aceptación
-Solucion* GlobalSearches::SA2(uint16_t k){
-    uint32_t iter = 1; // Numero de iteraciones
-    float Temp = MAXTEMP;     // Temperatura actual
-    Solucion* actual = GeneraSolucionInicialRandom();
-    Solucion* siguiente;
-    srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
-    do{
-        Temp = GetTemperatura(iter);
-        if (Temp == 0)
-            return actual;
-        // En esta ocasion 'siguiente' será una solucion vecina a k movimientos (inspirado en VNS)
-        siguiente = GetVecinaRandom(actual, k);
-        int delta = *siguiente - *actual;  // Gradiente entre siguiente y actual
-        if (delta >= 0){
-            actual = siguiente;
-        }else{
-            float probabilidad = exp((float)((float)delta/Temp));    // Probabilidad de aceptar 'siguiente' => e^(delta/Temp)
-            float aceptacion = (float)rand()/(float)RAND_MAX; // Genera un numero entre 0.0 y 1.0
-            // Aceptaremos la solución si ' aceptacion <= probabilidad'
-            if (aceptacion <= probabilidad){
-                actual = siguiente;
-            }
-        }
-        iter++;
-    } while (Temp > 0);
-
-    return actual;
-}
-
 // Busqueda por ENTORNO VARIABLE básica
 Solucion* GlobalSearches::VNS(uint16_t kMax){
     Solucion* actual = GeneraSolucionInicialRandom();
     Solucion* vecina = actual;
     uint16_t k = 1;
+
     do{
         vecina = GetVecinaRandom(actual, k);
-        //cout << "Random Vecina OK" << endl; // DEBUG
         vecina = Greedy(vecina);
-        //cout << "Greedy OK" << endl; // DEBUG
         if (vecina->Objetivo() < actual->Objetivo()){
             actual = vecina;
             k = 1;
-            //cout << "RESET K" << endl; // DEBUG
         }else{
             k++;
         }
@@ -157,7 +122,6 @@ void GlobalSearches::ActualizaTabu(vector<Solucion* > &vin, Solucion* nSol, uint
 // Busqueda TABU
 Solucion* GlobalSearches::TS(uint16_t tMax){
     Solucion* actual = GeneraSolucionInicialRandom();
-    //Solucion* actual = GeneraSolucionPrimeroQuepa();
     Solucion* mejorSol = actual;
     vector<Solucion* > tabu;
     uint16_t iter = 0;

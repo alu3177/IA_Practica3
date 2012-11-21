@@ -38,8 +38,14 @@
 #define MUTANTS        10     // Numero de descendientes que mutan
 class Genetics : public BaseClass {
     public:
-        // Constructor
+        /*
+         * CONSTRUCTOR
+         */
         Genetics(Instancia &ins) : BaseClass(ins) {}
+
+        /*
+         * METODOS (Coleccion de heuristicas)
+         */
 
         // Algoritmo genetico
         Solucion* AG(uint16_t maxGen = MAXGENERATIONS);

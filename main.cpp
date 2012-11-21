@@ -3,9 +3,9 @@
  *
  * AUTOR: Fernando González López-Peñalver (alu3177)
  * EMAIL: alu0100256543@ull.edu.es
- * ACCESO WEB AL REPOSITORIO DEL DESARROLLO: https://github.com/alu3177/IA_Practica3
+ * FECHA DE ENTREGA: 22 - 11 -12
  *
- * Fecha de entrega: 22-11-2012
+ * Se incluye repositorio GIT con el desarrollo de la práctica.
  *
  * Enunciado del problema:
  *      Se dispone de una cantidad indeterminada de contenedores de
@@ -14,7 +14,16 @@
  *      número posible de contenedores m*. La suma de los tamaños de los
  *      objetos asignados a contenedor no puede sobrepasar la capacidad C.
  *
+ *      Implementar los siguientes algoritmos:
+ *          - ILS   (Busqueda Local Iterada)
+ *          - SA    (Recocido Simulado)
+ *          - VNS   (Busqueda por Entorno Variable, basica)
+ *          - TS    (Busqueda Tabu)
+ *          - GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
+ *          - GA    (Algoritmo Genetico)
+ *
  */
+
 #include "lib/problema.hpp"
 
 int main (){

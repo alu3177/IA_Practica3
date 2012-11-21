@@ -1,20 +1,45 @@
+/*
+ * Inteligencia Artificial - Práctica 3: Problema de empaquetado unidimensional
+ *
+ * AUTOR: Fernando González López-Peñalver (alu3177)
+ * EMAIL: alu0100256543@ull.edu.es
+ * FECHA DE ENTREGA: 22 - 11 -12
+ *
+ * Se incluye repositorio GIT con el desarrollo de la práctica.
+ *
+ * Enunciado del problema:
+ *      Se dispone de una cantidad indeterminada de contenedores de
+ *      capacidad C y n objetos de tamaños w1, w2, …, wn. Se trata de
+ *      determinar el empaquetado de todos los objetos usando el menor
+ *      número posible de contenedores m*. La suma de los tamaños de los
+ *      objetos asignados a contenedor no puede sobrepasar la capacidad C.
+ *
+ *      Implementar los siguientes algoritmos:
+ *          - ILS   (Busqueda Local Iterada)
+ *          - SA    (Recocido Simulado)
+ *          - VNS   (Busqueda por Entorno Variable, basica)
+ *          - TS    (Busqueda Tabu)
+ *          - GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
+ *          - GA    (Algoritmo Genetico)
+ *
+ */
+
 #include "baseClass.hpp"
 
 using namespace std;
 
-#ifndef LOCALSEARCHES_H
-#define LOCALSEARCHES_H
+#ifndef GLOBALSEARCHES_H
+#define GLOBALSEARCHES_H
 
-const float MAXTEMP = 975.35;   // Temperatura maxima inicial para el SA
-const float DEFAULTSTEP = 0.133;  // Con 0.333 se obtienen valores mediocres en un tiempo aceptable
-                                  // Con 0.133 se obtienen valores aceptables en un tiempo mediocre
-const uint16_t MAXITERATIONS = 150;  // Numero maximo de iteraciones (Usado en TS)
+const float MAXTEMP = 5000;   // Temperatura maxima inicial para el SA
+const float DEFAULTSTEP = 0.333;  // Tamaño de los pasos para calcular la temeperatura en el SA
+const uint16_t MAXITERATIONS = 150;  // Numero maximo de iteraciones (Usado en TS e ILS)
 const uint16_t VNS_K = 8;
 const uint16_t TS_T = 5;
 
-class LocalSearches : public BaseClass {
+class GlobalSearches : public BaseClass {
     public:
-        LocalSearches(Instancia &ins) : BaseClass(ins) {}
+        GlobalSearches(Instancia &ins) : BaseClass(ins) {}
 
         // Búsqueda Local Iterada
         Solucion* ILS();
@@ -45,8 +70,5 @@ class LocalSearches : public BaseClass {
         // Instroduce 'nSol' al final de 'vin'. Si se sobrepasa 'tMax' se extrae el primer elemento de 'vin'
         // ** Usado por la Búsqueda Tabú **
         void ActualizaTabu (vector<Solucion* > &vin, Solucion* nSol, uint16_t tMax = TS_T);
-
-        // Realiza una busqueda voraz
-        Solucion* Greedy(Solucion* &sIn);
 };
 #endif

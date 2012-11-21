@@ -1,3 +1,29 @@
+/*
+ * Inteligencia Artificial - Práctica 3: Problema de empaquetado unidimensional
+ *
+ * AUTOR: Fernando González López-Peñalver (alu3177)
+ * EMAIL: alu0100256543@ull.edu.es
+ * FECHA DE ENTREGA: 22 - 11 -12
+ *
+ * Se incluye repositorio GIT con el desarrollo de la práctica.
+ *
+ * Enunciado del problema:
+ *      Se dispone de una cantidad indeterminada de contenedores de
+ *      capacidad C y n objetos de tamaños w1, w2, …, wn. Se trata de
+ *      determinar el empaquetado de todos los objetos usando el menor
+ *      número posible de contenedores m*. La suma de los tamaños de los
+ *      objetos asignados a contenedor no puede sobrepasar la capacidad C.
+ *
+ *      Implementar los siguientes algoritmos:
+ *          - ILS   (Busqueda Local Iterada)
+ *          - SA    (Recocido Simulado)
+ *          - VNS   (Busqueda por Entorno Variable, basica)
+ *          - TS    (Busqueda Tabu)
+ *          - GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
+ *          - GA    (Algoritmo Genetico)
+ *
+ */
+
 #include "baseClass.hpp"
 
 // Metodo utilizado para ordenar de mayor a menor numeros en std::sort
@@ -225,4 +251,23 @@ void BaseClass::BorrarContenedor(vector<uint16_t> &vSol, vector<uint16_t> &vEsp,
         if (vSol[i] > pos)
             vSol[i]--;
     }
+}
+
+
+// Realiza una busqueda voraz
+Solucion* BaseClass::Greedy(Solucion* &sIn){
+    Solucion* actual = sIn;
+    Solucion* vecina = sIn;
+    uint32_t maxIter = 5000;
+
+    uint32_t iter = 0;
+    while (iter < maxIter){
+        vecina = GeneraMejorVecina(actual);
+        if (vecina->Objetivo() < actual->Objetivo())
+            actual = vecina;
+        else
+            return actual;
+        iter++;
+    }
+    return actual;
 }

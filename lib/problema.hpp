@@ -1,6 +1,32 @@
+/*
+ * Inteligencia Artificial - Práctica 3: Problema de empaquetado unidimensional
+ *
+ * AUTOR: Fernando González López-Peñalver (alu3177)
+ * EMAIL: alu0100256543@ull.edu.es
+ * FECHA DE ENTREGA: 22 - 11 -12
+ *
+ * Se incluye repositorio GIT con el desarrollo de la práctica.
+ *
+ * Enunciado del problema:
+ *      Se dispone de una cantidad indeterminada de contenedores de
+ *      capacidad C y n objetos de tamaños w1, w2, …, wn. Se trata de
+ *      determinar el empaquetado de todos los objetos usando el menor
+ *      número posible de contenedores m*. La suma de los tamaños de los
+ *      objetos asignados a contenedor no puede sobrepasar la capacidad C.
+ *
+ *      Implementar los siguientes algoritmos:
+ *          - ILS   (Busqueda Local Iterada)
+ *          - SA    (Recocido Simulado)
+ *          - VNS   (Busqueda por Entorno Variable, basica)
+ *          - TS    (Busqueda Tabu)
+ *          - GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
+ *          - GA    (Algoritmo Genetico)
+ *
+ */
+
 #include <stdlib.h>
 #include "aux.cpp"
-#include "localSearches.hpp"
+#include "globalSearches.hpp"
 #include "constructivas.hpp"
 #include "genetics.hpp"
 
@@ -34,14 +60,14 @@ class Problema {
         // LLAMADAS A LOS DIFERENTES ALGORITMOS (que están encapsulados en clases)
         // 'ins' permite ejecutar los algoritmos para una sola instancia.
         void BusquedasLocales(int16_t ins = -1){
-            LocalSearches* local;
+            GlobalSearches* local;
             Solucion* solucion;
             // Ejecutar para todas las instancias cargadas
             if (ins < 0){
                 //cout << "Numero de instancias: " << _nInstancias << endl;     // DEBUG
                 for (uint16_t i = 0; i < _nInstancias; i++){
                     cout << *_instances->at(i) << endl;
-                    local = new LocalSearches(*_instances->at(i));
+                    local = new GlobalSearches(*_instances->at(i));
 
                     cout << "-- ILS 1: " << endl;
                     solucion = local->ILS();
@@ -65,7 +91,7 @@ class Problema {
 
                 }
             }else{
-                local = new LocalSearches(*_instances->at(ins));
+                local = new GlobalSearches(*_instances->at(ins));
                 cout << *_instances->at(ins) << endl;
 
                     cout << "-- ILS 1: " << endl;
@@ -135,7 +161,7 @@ class Problema {
         }
 
         void RunAllHeuristics(int16_t ins = -1){
-            LocalSearches* local;
+            GlobalSearches* local;
             Constructivas* cons;
             Genetics* gen;
             Solucion* solucion;
@@ -143,7 +169,7 @@ class Problema {
             if (ins < 0){
                 for (uint16_t i = 0; i < _nInstancias; i++){
                     cout << *_instances->at(i) << endl;
-                    local = new LocalSearches(*_instances->at(i));
+                    local = new GlobalSearches(*_instances->at(i));
                     cons = new Constructivas(*_instances->at(i));
                     gen = new Genetics(*_instances->at(i));
 
@@ -185,7 +211,7 @@ class Problema {
                 }
             }else{
                 cout << *_instances->at(ins) << endl;
-                local = new LocalSearches(*_instances->at(ins));
+                local = new GlobalSearches(*_instances->at(ins));
                 cons = new Constructivas(*_instances->at(ins));
                 gen = new Genetics(*_instances->at(ins));
 

@@ -1,3 +1,29 @@
+/*
+ * Inteligencia Artificial - Práctica 3: Problema de empaquetado unidimensional
+ *
+ * AUTOR: Fernando González López-Peñalver (alu3177)
+ * EMAIL: alu0100256543@ull.edu.es
+ * FECHA DE ENTREGA: 22 - 11 -12
+ *
+ * Se incluye repositorio GIT con el desarrollo de la práctica.
+ *
+ * Enunciado del problema:
+ *      Se dispone de una cantidad indeterminada de contenedores de
+ *      capacidad C y n objetos de tamaños w1, w2, …, wn. Se trata de
+ *      determinar el empaquetado de todos los objetos usando el menor
+ *      número posible de contenedores m*. La suma de los tamaños de los
+ *      objetos asignados a contenedor no puede sobrepasar la capacidad C.
+ *
+ *      Implementar los siguientes algoritmos:
+ *          - ILS   (Busqueda Local Iterada)
+ *          - SA    (Recocido Simulado)
+ *          - VNS   (Busqueda por Entorno Variable, basica)
+ *          - TS    (Busqueda Tabu)
+ *          - GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
+ *          - GA    (Algoritmo Genetico)
+ *
+ */
+
 #include "constructivas.hpp"
 
 // Metodo utilizado para ordenar de menor a mayor (espacio dejado) candidatos en std::sort
@@ -46,16 +72,16 @@ vector<Candidato> Constructivas::GetListaRestringidaCandidatos(vector<uint16_t> 
     // Construccion de candidatos para todo 'i' != 'EXPLOREDWEIGHT'
     for (uint16_t i = 0; i < pesos.size(); i++){  // Recorremos objetos
         bool insertado = false;  // Indica si se ha insertado en un contenedor
-        Candidato bestCandidato;  // Mejor paso candidato
+        Candidato bestCandidato;  // Mejor paso candidato para el objeto 'i'
         bestCandidato.oID = i;
         bestCandidato.freeSpace = _instance.GetCapacidadC();
         if (pesos[i] != EXPLOREDWEIGHT){  // Nos aseguramos de comprobar sólo para objetos sin contenedor asociado
             for (uint16_t j = 0; j < contenedores.size(); j++){ // Recorremos contenedores
                 uint16_t freespace = contenedores[j]->c - contenedores[j]->usedSpace; // Espacio libre en 'j' actualmente
-                if (pesos[i] <= freespace){  // Paso factible
+                if (pesos[i] <= freespace){  // Paso factible ('i', cabe en 'j')
                     if ((pesos[i] - freespace) < bestCandidato.freeSpace){  // Mejoramos el mejor paso anterior
                         bestCandidato.cID = j;
-                        bestCandidato.freeSpace = pesos[i] - freespace;
+                        bestCandidato.freeSpace = freespace - pesos[i];
                         insertado = true;
                     }
                 }

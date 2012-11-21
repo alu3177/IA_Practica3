@@ -20,7 +20,7 @@
  *          - VNS   (Busqueda por Entorno Variable, basica)
  *          - TS    (Busqueda Tabu)
  *          - GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
- *          - GA    (Algoritmo Genetico)
+ *          - AG    (Algoritmo Genetico)
  *
  */
 

@@ -20,45 +20,106 @@
  *          - VNS   (Busqueda por Entorno Variable, basica)
  *          - TS    (Busqueda Tabu)
  *          - GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
- *          - GA    (Algoritmo Genetico)
+ *          - AG    (Algoritmo Genetico)
  *
  */
 
 #include "lib/problema.hpp"
 
+void Menu(Problema* prob){
+    uint16_t opcion = 999;  // Opcion del menu seleccionada
+    int ins;                // Instancia seleccionada
+    string heu;             // Heuristica seleccionada
+    uint16_t veces;         // Numero de veces a ejecutar una heuristica
+    Solucion* sol;
+    while (opcion != 0){
+        system("clear");
+        cout << "#############################################" << endl;
+        cout << "# " << C_RED << "Tarea 3" << C_DEFAULT << "                                   #" << endl;
+        cout << "#   Problema de empaquetado unidimensional  #" << endl;
+        cout << "#############################################" << endl;
+        cout << "#  1. Ejecutar una heuristica en concreto.  #" << endl;
+        cout << "#  2. Ejecutar todas las heuristicas.       #" << endl;
+        cout << "#  3. Ejecutar una heuristica 'n' veces.    #" << endl;
+        cout << "#                                           #" << endl;
+        cout << "#  0. SALIR                                 #" << endl;
+        cout << "#############################################" << endl << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        switch(opcion){
+            case 1:
+                system("clear");
+                cout << C_RED << "ILS, SA, VNS, TS, GRASP, AG" << C_DEFAULT << endl << "Escriba una heuristica de las posibles (case sensitive): ";
+                cin >> heu;
+                cout << "Seleccione una instancia [0, " << prob->GetNumeroInstancias() - 1 << "] (-1 para selecionar todas): ";
+                cin >> ins;
+                if (ins >= 0){
+                    cout << *prob->GetInstancia(ins) << endl;
+                    prob->RunHeuristic(heu, ins);
+                }else{
+                    for (uint16_t i = 0; i < prob->GetNumeroInstancias(); i++){
+                        cout << *prob->GetInstancia(i) << endl;
+                        prob->RunHeuristic(heu, i);
+                    }
+
+                }
+                cout << "Pulse enter para continuar..." << endl;
+                cin.ignore().get();
+                break;
+
+            case 2:
+                system("clear");
+                cout << "Seleccione una instancia [0, " << prob->GetNumeroInstancias() - 1 << "] (-1 para selecionar todas): ";
+                cin >> ins;
+                prob->RunAllHeuristics(ins);
+                cout << "Pulse enter para continuar..." << endl;
+                cin.ignore().get();
+                break;
+
+            case 3:
+                system("clear");
+                cout << C_RED << "ILS, SA, VNS, TS, GRASP, AG" << C_DEFAULT << endl << "Escriba una heuristica de las posibles (case sensitive): ";
+                cin >> heu;
+                cout << "Seleccione una instancia [0, " << prob->GetNumeroInstancias() - 1 << "]: ";
+                cin >> ins;
+                cout << "Numero de ejecuciones de la heuristica seleccionada: ";
+                cin >> veces;
+                if ((ins >= 0) && (ins < prob->GetNumeroInstancias())){
+                    uint32_t contTotal = 0; // Sumatorio de contenedores
+                    uint32_t fSpaceTotal = 0; // Sumatorio de espacio libre
+                    for (uint16_t t = 0; t < veces; t++){
+                        sol = prob->RunHeuristicQuiet(heu, ins);
+                        contTotal += sol->Objetivo();
+                        fSpaceTotal += sol->GetEspacioLibre();
+                        cout << t << endl;
+                    }
+                    cout << *prob->GetInstancia(ins) << endl;
+                    cout << "Numero medio de contenedores  = " << C_BRED << ((double)contTotal/veces) << C_DEFAULT << endl;
+                    cout << "Numero medio de espacio libre = " << C_BRED << ((double)fSpaceTotal/veces) << C_DEFAULT << endl;
+                }
+                cout << "Pulse enter para continuar..." << endl;
+                cin.ignore().get();
+                break;
+
+            case 0:
+                break;
+
+            default:
+                system("clear");
+                cout << C_BRED << "OPCION INCORRECTA" << C_DEFAULT << endl;
+                cout << "Pulse enter para continuar..." << endl;
+                cin.ignore().get();
+                break;
+        }
+
+    }
+}
+
 int main (){
 
     Problema* prob = new Problema();
     prob->ParseFile("data/BPP10.txt");
-    //prob->BusquedasLocales();
-    //prob->HeuristicasConstructivas();
-    //prob->Geneticas();
-    prob->RunAllHeuristics();
-
-/*
-    // Creamos el problema de las transparencias:
-    vector<uint16_t>* w = new vector<uint16_t>;
-
-    w->push_back(3);
-    w->push_back(6);
-    w->push_back(2);
-    w->push_back(1);
-    w->push_back(5);
-    w->push_back(7);
-    w->push_back(2);
-    w->push_back(4);
-    w->push_back(1);
-    w->push_back(9);
-
-    Instancia* ins = new Instancia("Transparencias", 10, 10, 0, w);
-    cout << *ins << endl;
-    Instancia inn = *ins;
-    cout << inn << endl;
-    Genetics* gen = new Genetics(inn);
-    cout << *gen->AG() << endl;
-//    LocalSearches* local = new LocalSearches(inn);
-//    cout << *local->SA() << endl;
-*/
+    Menu(prob);
 
     return 0;
 }

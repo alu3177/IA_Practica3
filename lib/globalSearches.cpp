@@ -20,7 +20,7 @@
  *          - VNS   (Busqueda por Entorno Variable, basica)
  *          - TS    (Busqueda Tabu)
  *          - GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
- *          - GA    (Algoritmo Genetico)
+ *          - AG    (Algoritmo Genetico)
  *
  */
 
@@ -132,10 +132,13 @@ Solucion* GlobalSearches::VNS(uint16_t kMax){
     uint16_t k = 1;
     do{
         vecina = GetVecinaRandom(actual, k);
+        //cout << "Random Vecina OK" << endl; // DEBUG
         vecina = Greedy(vecina);
+        //cout << "Greedy OK" << endl; // DEBUG
         if (vecina->Objetivo() < actual->Objetivo()){
             actual = vecina;
             k = 1;
+            //cout << "RESET K" << endl; // DEBUG
         }else{
             k++;
         }

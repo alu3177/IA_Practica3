@@ -20,7 +20,7 @@
  *          - VNS   (Busqueda por Entorno Variable, basica)
  *          - TS    (Busqueda Tabu)
  *          - GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
- *          - GA    (Algoritmo Genetico)
+ *          - AG    (Algoritmo Genetico)
  *
  */
 
@@ -168,8 +168,10 @@ Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu){
 // Devuelve una solucion vecina escogida al azar entre las posibles
 // CHANCE es la probabilidad de aceptar (y reparar) una "no factible"
 Solucion* BaseClass::GetVecinaRandom(Solucion* sIn){
-    Solucion* result = NULL;
+    Solucion* result = sIn;
     float chance;
+    uint32_t maxIter = 1200;
+    uint32_t iter = 0;
 
     if ((CHANCE >= 0) && (CHANCE <= 1))
         chance = CHANCE;
@@ -178,7 +180,7 @@ Solucion* BaseClass::GetVecinaRandom(Solucion* sIn){
     else if (CHANCE > 1)
         chance = 1;
     srand ( time(NULL) + rand() );   // Inicializamos la semilla del RANDOM
-    while (1){
+    while (iter < maxIter){
         uint16_t obj = rand() % sIn->GetNumObjetos();  // Objeto seleccionado al azar
         uint16_t cont = rand() % sIn->GetNumContenedores(); // Contenedor seleccionado al azar
         result = MoverObjeto(sIn, obj, cont);
@@ -192,7 +194,9 @@ Solucion* BaseClass::GetVecinaRandom(Solucion* sIn){
                     return result;
             }
         }
+        iter++;
     }
+    return result;
 }
 
 // Devuelve una solucion vecina (a profundidad k) escogida al azar entre las posibles
@@ -258,7 +262,7 @@ void BaseClass::BorrarContenedor(vector<uint16_t> &vSol, vector<uint16_t> &vEsp,
 Solucion* BaseClass::Greedy(Solucion* &sIn){
     Solucion* actual = sIn;
     Solucion* vecina = sIn;
-    uint32_t maxIter = 5000;
+    uint32_t maxIter = 500;
 
     uint32_t iter = 0;
     while (iter < maxIter){

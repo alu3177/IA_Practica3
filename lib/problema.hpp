@@ -20,11 +20,12 @@
  *          - VNS   (Busqueda por Entorno Variable, basica)
  *          - TS    (Busqueda Tabu)
  *          - GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
- *          - GA    (Algoritmo Genetico)
+ *          - AG    (Algoritmo Genetico)
  *
  */
 
 #include <stdlib.h>
+#include <string>
 #include "aux.cpp"
 #include "globalSearches.hpp"
 #include "constructivas.hpp"
@@ -53,195 +54,93 @@ class Problema {
         }
 
         // Getters y Setters
-
-        //inline void SetNumInstancias (uint16_t nI) { _nInstancias = nI; }
         inline Instancia* GetInstancia(uint16_t pos) { return _instances->at(pos); }
+        inline uint16_t GetNumeroInstancias() { return _instances->size(); }
 
-        // LLAMADAS A LOS DIFERENTES ALGORITMOS (que están encapsulados en clases)
-        // 'ins' permite ejecutar los algoritmos para una sola instancia.
-        void BusquedasLocales(int16_t ins = -1){
-            GlobalSearches* local;
-            Solucion* solucion;
-            // Ejecutar para todas las instancias cargadas
-            if (ins < 0){
-                //cout << "Numero de instancias: " << _nInstancias << endl;     // DEBUG
-                for (uint16_t i = 0; i < _nInstancias; i++){
-                    cout << *_instances->at(i) << endl;
-                    local = new GlobalSearches(*_instances->at(i));
-
-                    cout << "-- ILS 1: " << endl;
-                    solucion = local->ILS();
-                    cout << *solucion;
-
-                    cout << "-- SA 1: " << endl;
-                    solucion = local->SA();
-                    cout << *solucion;
-
-                    cout << "-- SA 2: " << endl;
-                    solucion = local->SA2();
-                    cout << *solucion;
-
-                    cout << "-- VNS 1: " << endl;
-                    solucion = local->VNS();
-                    cout << *solucion;
-
-                    cout << "-- TS 1: " << endl;
-                    solucion = local->TS(50);
+        void RunHeuristic(string name, uint16_t ins){
+            Solucion* solucion = NULL;
+            if (ins < _nInstancias){
+                if (name == "ILS"){
+                    GlobalSearches* heu = new GlobalSearches(*GetInstancia(ins));
+                    cout << C_BLUE << "-- ILS (Busqueda Local Iterada): " << C_DEFAULT << endl;
+                    solucion = heu->ILS();
+                }else if (name == "SA"){
+                    GlobalSearches* heu = new GlobalSearches(*GetInstancia(ins));
+                    cout << C_BLUE << "-- SA (Recocido Simulado): " << C_DEFAULT << endl;
+                    solucion = heu->SA();
+                }else if (name == "VNS"){
+                    GlobalSearches* heu = new GlobalSearches(*GetInstancia(ins));
+                    cout << C_BLUE << "-- VNS (Busqueda por Entorno Variable, basica): " << C_DEFAULT << endl;
+                    solucion = heu->VNS();
+                }else if (name == "TS"){
+                    GlobalSearches* heu = new GlobalSearches(*GetInstancia(ins));
+                    cout << C_BLUE << "-- TS: " << C_DEFAULT << endl;
+                    solucion = heu->TS();
+                }else if (name == "GRASP"){
+                    Constructivas* heu = new Constructivas(*GetInstancia(ins));
+                    cout << C_BLUE << "-- GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz): " << C_DEFAULT << endl;
+                    solucion = heu->GRASP();
+                }else if (name == "AG"){
+                    Genetics* heu = new Genetics(*GetInstancia(ins));
+                    cout << C_BLUE << "-- AG (Algoritmo Genetico): " << C_DEFAULT << endl;
+                    solucion = heu->AG();
+                    }else
+                        return;  // 'name' INVALIDO
+                if (solucion != NULL){
                     cout << *solucion << endl;
-
                 }
-            }else{
-                local = new GlobalSearches(*_instances->at(ins));
-                cout << *_instances->at(ins) << endl;
-
-                    cout << "-- ILS 1: " << endl;
-                    solucion = local->ILS();
-                    cout << *solucion;
-
-                    cout << "-- SA 1: " << endl;
-                    solucion = local->SA();
-                    cout << *solucion;
-
-                    cout << "-- SA 2: " << endl;
-                    solucion = local->SA2();
-                    cout << *solucion;
-
-                    cout << "-- VNS 1: " << endl;
-                    solucion = local->VNS();
-                    cout << *solucion;
-
-                    cout << "-- TS 1: " << endl;
-                    solucion = local->TS(25);
-                    cout << *solucion << endl;
             }
         }
 
-        void HeuristicasConstructivas(int16_t ins = -1){
-            Constructivas* cons;
-            Solucion* solucion;
-            // Ejecutar para todas las instancias cargadas
-            if (ins < 0){
-                for (uint16_t i = 0; i < _nInstancias; i++){
-                    cout << *_instances->at(i) << endl;
-                    cons = new Constructivas(*_instances->at(i));
-
-                    cout << "-- GRASP: " << endl;
-                    solucion = cons->GRASP();
-                    cout << *solucion << endl;
-                }
-            }else{
-                cons = new Constructivas(*_instances->at(ins));
-
-                cout << "-- GRASP: " << endl;
-                solucion = cons->GRASP();
-                cout << *solucion;
+        Solucion* RunHeuristicQuiet(string name, uint16_t ins){
+            Solucion* solucion = NULL;
+            if (ins < _nInstancias){
+                if (name == "ILS"){
+                    GlobalSearches* heu = new GlobalSearches(*GetInstancia(ins));
+                    solucion = heu->ILS();
+                }else if (name == "SA"){
+                    GlobalSearches* heu = new GlobalSearches(*GetInstancia(ins));
+                    solucion = heu->SA();
+                }else if (name == "VNS"){
+                    GlobalSearches* heu = new GlobalSearches(*GetInstancia(ins));
+                    solucion = heu->VNS();
+                }else if (name == "TS"){
+                    GlobalSearches* heu = new GlobalSearches(*GetInstancia(ins));
+                    solucion = heu->TS();
+                }else if (name == "GRASP"){
+                    Constructivas* heu = new Constructivas(*GetInstancia(ins));
+                    solucion = heu->GRASP();
+                }else if (name == "AG"){
+                    Genetics* heu = new Genetics(*GetInstancia(ins));
+                    solucion = heu->AG();
+                }else
+                    return NULL;  // 'name' INVALIDO
             }
+            return solucion;
         }
 
-        void Geneticas(int16_t ins = -1){
-            Genetics* cons;
-            Solucion* solucion;
-            // Ejecutar para todas las instancias cargadas
-            if (ins < 0){
-                for (uint16_t i = 0; i < _nInstancias; i++){
-                    cout << *_instances->at(i) << endl;
-                    cons = new Genetics(*_instances->at(i));
 
-                    cout << "-- AG: " << endl;
-                    solucion = cons->AG();
-                    cout << *solucion << endl;
-                }
-            }else{
-                cons = new Genetics(*_instances->at(ins));
-
-                cout << "-- AG: " << endl;
-                solucion = cons->AG();
-                cout << *solucion;
-            }
-        }
-
+        // Ejecuta todas las heuristicas para todas la instancia 'ins'
+        // Si 'ins' es "-1" se ejecutan todas las instancias
         void RunAllHeuristics(int16_t ins = -1){
-            GlobalSearches* local;
-            Constructivas* cons;
-            Genetics* gen;
-            Solucion* solucion;
-            // Ejecutar para todas las instancias cargadas
-            if (ins < 0){
+            if (ins < 0){ // Todas las instancias
                 for (uint16_t i = 0; i < _nInstancias; i++){
                     cout << *_instances->at(i) << endl;
-                    local = new GlobalSearches(*_instances->at(i));
-                    cons = new Constructivas(*_instances->at(i));
-                    gen = new Genetics(*_instances->at(i));
-
-
-                    cout << C_BLUE << "-- ILS 1: " << C_DEFAULT << endl;
-                    solucion = local->ILS();
-                    cout << *solucion;
-                    delete(solucion);
-
-                    cout << C_BLUE << "-- SA 1: " << C_DEFAULT << endl;
-                    solucion = local->SA();
-                    cout << *solucion;
-                    delete(solucion);
-
-                    cout << C_BLUE << "-- VNS 1: " << C_DEFAULT << endl;
-                    solucion = local->VNS();
-                    cout << *solucion;
-                    delete(solucion);
-
-                    cout << C_BLUE << "-- TS 1: " << C_DEFAULT << endl;
-                    solucion = local->TS();
-                    cout << *solucion;
-                    delete(solucion);
-
-                    cout << C_BLUE << "-- GRASP: " << C_DEFAULT << endl;
-                    solucion = cons->GRASP();
-                    cout << *solucion;
-                    delete(solucion);
-
-                    cout << C_BLUE << "-- AG: " << C_DEFAULT << endl;
-                    solucion = gen->AG();
-                    cout << *solucion << endl;
-                    delete(solucion);
-
-                    delete(local);
-                    delete(cons);
-                    delete(gen);
-
+                    RunHeuristic("ILS", i);
+                    RunHeuristic("SA", i);
+                    RunHeuristic("VNS", i);
+                    RunHeuristic("TS", i);
+                    RunHeuristic("GRASP", i);
+                    RunHeuristic("AG", i);
                 }
-            }else{
+            }else if (ins < _nInstancias){ // Ejecutar para la instancia 'ins'
                 cout << *_instances->at(ins) << endl;
-                local = new GlobalSearches(*_instances->at(ins));
-                cons = new Constructivas(*_instances->at(ins));
-                gen = new Genetics(*_instances->at(ins));
-
-                cout << C_BLUE << "-- ILS 1: " << C_DEFAULT << endl;
-                solucion = local->ILS();
-                cout << *solucion;
-
-                cout << C_BLUE << "-- SA 1: " << C_DEFAULT << endl;
-                solucion = local->SA();
-                cout << *solucion;
-
-                cout << C_BLUE << "-- SA 2: " << C_DEFAULT << endl;
-                solucion = local->SA2();
-                cout << *solucion;
-
-                cout << C_BLUE << "-- VNS 1: " << C_DEFAULT << endl;
-                solucion = local->VNS();
-                cout << *solucion;
-
-                cout << C_BLUE << "-- TS 1: " << C_DEFAULT << endl;
-                solucion = local->TS();
-                cout << *solucion;
-
-                cout << C_BLUE << "-- GRASP: " << C_DEFAULT << endl;
-                solucion = cons->GRASP();
-                cout << *solucion;
-
-                cout << C_BLUE << "-- AG: " << C_DEFAULT << endl;
-                solucion = gen->AG();
-                cout << *solucion << endl;
+                RunHeuristic("ILS", ins);
+                RunHeuristic("SA", ins);
+                RunHeuristic("VNS", ins);
+                RunHeuristic("TS", ins);
+                RunHeuristic("GRASP", ins);
+                RunHeuristic("AG", ins);
             }
         }
 

@@ -102,8 +102,8 @@ Solucion* GlobalSearches::VNS(uint16_t kMax){
     do{
         for (uint16_t i = 0; i < k; i++){  // La modificacion consistio en añadir este bucle for
             vecina = GetVecinaRandom(actual, k);
-            vecina = Greedy(vecina);
         }
+        vecina = Greedy(vecina);
         if (vecina->Objetivo() < actual->Objetivo()){
             actual = vecina;
             k = 1;

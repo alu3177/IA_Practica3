@@ -32,6 +32,8 @@ bool CompareSolucion (Solucion* s1, Solucion* s2){
 }
 
 // Algoritmo genetico
+// METAHEURISTICA
+// 3) GA
 Solucion* Genetics::AG(uint16_t maxGen){
     uint16_t t = 0;  // Generacion actual
     vector<Solucion* > poblacion;

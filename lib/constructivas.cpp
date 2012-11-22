@@ -31,6 +31,9 @@ bool CompareCandidato (Candidato c1, Candidato c2){
     return (c1.freeSpace < c2.freeSpace);
 }
 
+// GRASP (Procedimiento de Busqueda Adaptativa Aleatoria Voraz)
+// METAHEURISTICA
+// 4) GRASP
 Solucion* Constructivas::GRASP (uint16_t t){
     vector<Contenedor* > contenedores;
     vector<uint16_t> pesos = *_instance.GetPesos();

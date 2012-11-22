@@ -154,7 +154,7 @@ class Problema {
             }
         }
 
-        // Carga los todos los datos necesarios desde el fichero situado en 'path'
+        // Carga todos los datos necesarios desde el fichero situado en 'path'
         void ParseFile (const char* path){
             fstream file;
             char *buff2 = new char[BUFFSIZE];

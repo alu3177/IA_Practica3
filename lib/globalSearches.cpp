@@ -30,6 +30,8 @@
 using namespace std;
 
 // Búsqueda Local Iterada
+// METAHEURISTICA
+// 1) ILS
 Solucion* GlobalSearches::ILS(){
     uint32_t iter = 0;
     Solucion* actual = GeneraSolucionInicialRandom();
@@ -63,6 +65,8 @@ float GlobalSearches::GetTemperatura (uint32_t t, float step){
 // Simulated Annealing (Recocido simulado)
 //      Cuanto menor sea DEFAULTSTEP más ciclos se generaran
 //      Cuanto mayor sea MAXTEMP mayores serán las probabilidades de aceptación
+// METAHEURISTICA
+// 2) SA
 Solucion* GlobalSearches::SA(){
     uint32_t iter = 1; // Numero de iteraciones
     float Temp = MAXTEMP;     // Temperatura actual
@@ -93,6 +97,8 @@ Solucion* GlobalSearches::SA(){
 }
 
 // Busqueda por ENTORNO VARIABLE básica
+// METAHEURISTICA
+// 6) VNS
 Solucion* GlobalSearches::VNS(uint16_t kMax){
     Solucion* actual = GeneraSolucionInicialRandom();
     Solucion* vecina = actual;
@@ -120,6 +126,8 @@ void GlobalSearches::ActualizaTabu(vector<Solucion* > &vin, Solucion* nSol, uint
 }
 
 // Busqueda TABU
+// METAHEURISTICA
+// 5) TS
 Solucion* GlobalSearches::TS(uint16_t tMax){
     Solucion* actual = GeneraSolucionInicialRandom();
     Solucion* mejorSol = actual;

@@ -70,6 +70,6 @@ class GlobalSearches : public BaseClass {
 
         // Instroduce 'nSol' al final de 'vin'. Si se sobrepasa 'tMax' se extrae el primer elemento de 'vin'
         // ** Usado por la Búsqueda Tabú **
-        void ActualizaTabu (vector<Solucion* > &vin, Solucion* nSol, uint16_t tMax = TS_T);
+        void ActualizaTabu (vector<uint16_t > &vin, uint16_t cont, uint16_t tMax = TS_T);
 };
 #endif

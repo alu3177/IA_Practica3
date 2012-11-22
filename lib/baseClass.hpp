@@ -32,6 +32,7 @@
 using namespace std;
 
 extern bool InVector (vector<Solucion* > &vin, Solucion* sol, uint16_t capacidad);
+extern bool InVector (vector<uint16_t> &vin, uint16_t n);
 extern bool FullyExplored (vector<uint16_t> &v);
 extern uint16_t GetMayor(vector<uint16_t> &vin);
 extern uint16_t Sum(vector<uint16_t> &vin);
@@ -74,11 +75,7 @@ class BaseClass{
         Solucion* GeneraMejorVecina (Solucion* sIn);
 
         // Devuelve la mejor solucion vecina genrada teniendo en cuenta la lista 'tabu'
-        Solucion* GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu);
-
-        // Devuelve una solucion vecina genrada al azar teniendo en cuenta la lista 'tabu'
-        // ** Usado por la Búsqueda Tabú **
-        Solucion* GeneraVecinaRandom (Solucion* sIn, vector<Solucion* > tabu);
+        Solucion* GeneraMejorVecina (Solucion* sIn, vector<uint16_t> &tabu, uint16_t tMax);
 
         // Devuelve una solucion vecina escogida al azar entre las posibles
         Solucion* GetVecinaRandom(Solucion* sIn);

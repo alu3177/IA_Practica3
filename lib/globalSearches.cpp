@@ -117,29 +117,19 @@ Solucion* GlobalSearches::VNS(uint16_t kMax){
     return actual;
 }
 
-// Instroduce 'nSol' al final de 'vin'. Si se sobrepasa 'tMax' se extrae el primer elemento de 'vin'
-// ** Usado por la Búsqueda Tabú **
-void GlobalSearches::ActualizaTabu(vector<Solucion* > &vin, Solucion* nSol, uint16_t tMax){
-    vin.push_back(nSol);
-    if (vin.size() > tMax)
-        vin.erase(vin.begin());
-}
-
 // Busqueda TABU
-// METAHEURISTICA
-// 5) TS
+// MODIFICACION 1
 Solucion* GlobalSearches::TS(uint16_t tMax){
     Solucion* actual = GeneraSolucionInicialRandom();
     Solucion* mejorSol = actual;
-    vector<Solucion* > tabu;
+    vector<uint16_t> tabu;
     uint16_t iter = 0;
 
     while (iter < MAXITERATIONS){
-        actual = GeneraMejorVecina(actual, tabu);
+        actual = GeneraMejorVecina(actual, tabu, tMax); // Genera la vecina teniendo en cuenta la lista Tabu. Ademas actualiza la lista
         if (actual->ObjetivoAux(_instance.GetCapacidadC()) < mejorSol->ObjetivoAux(_instance.GetCapacidadC())){
             mejorSol = actual;
         }
-        ActualizaTabu(tabu, actual, tMax);
         iter++;
     }
     return mejorSol;

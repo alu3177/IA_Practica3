@@ -136,23 +136,31 @@ Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn){
     return mejor;
 }
 
+
 // Devuelve la mejor solucion vecina genrada teniendo en cuenta la lista 'tabu'
 // ** Usado por la Búsqueda Tabú **
-Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu){
+// MODIFICACION 1
+Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn, vector<uint16_t> &tabu, uint16_t tMax){
     Solucion* mejor = sIn;
+    uint16_t lastCont; // Ultimo contenedor utilizado
     for (uint16_t i = 0; i < sIn->GetNumObjetos(); i++){  // Recorremos el vector solucion
         uint16_t bestSpace = _instance.GetCapacidadC(); // Mejor "espacio libre" encontrado
         for (uint16_t j = 0; j < sIn->GetNumContenedores(); j++){  // Recorremos el vector de espacios
             uint16_t nSpace = sIn->VectorEspacios(j) + _instance.GetPeso(i);  // Espacio ocupado si se mueve 'i' al contenedor 'j'
             if (nSpace <= _instance.GetCapacidadC()){  // Si 'i' cabe en 'j' lo comparamos con el mejor resultado
                 if (nSpace < bestSpace){  // Si es mejor ...
-                    Solucion* sTemp = MoverObjeto(sIn, i, j);
-                    uint16_t capacidad = _instance.GetCapacidadC();
-                    if (!InVector(tabu, sTemp, capacidad)){
+                    if (!InVector(tabu, j)){  // Si el contenedr 'j' no esta en la lista tabu, seguimos mirando
+                        Solucion* sTemp = MoverObjeto(sIn, i, j);
+                        uint16_t capacidad = _instance.GetCapacidadC();
                         bestSpace = nSpace;
                         uint16_t prevObj = mejor->ObjetivoAux(capacidad);  // Numero de contenedores de la anterior mejor solucion
                         mejor = sTemp;
+                        lastCont = j;
                         if (mejor->ObjetivoAux(capacidad) < prevObj){  // Si se ha eliminado un contenedor implica que es la mejor solucion
+                            // Actualizacion de la lista TABU
+                            tabu.push_back(j);
+                                if (tabu.size() > tMax)
+                                    tabu.erase(tabu.begin());
                             return mejor;
                         }
                     }
@@ -160,6 +168,10 @@ Solucion* BaseClass::GeneraMejorVecina (Solucion* sIn, vector<Solucion* > tabu){
             }
         }
     }
+    // Actualizacion de la lista TABU
+    tabu.push_back(lastCont);
+    if (tabu.size() > tMax)
+        tabu.erase(tabu.begin());
     return mejor;
 }
 

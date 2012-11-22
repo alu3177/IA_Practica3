@@ -93,14 +93,17 @@ Solucion* GlobalSearches::SA(){
 }
 
 // Busqueda por ENTORNO VARIABLE básica
+// MODIFICACION 2
 Solucion* GlobalSearches::VNS(uint16_t kMax){
     Solucion* actual = GeneraSolucionInicialRandom();
     Solucion* vecina = actual;
     uint16_t k = 1;
 
     do{
-        vecina = GetVecinaRandom(actual, k);
-        vecina = Greedy(vecina);
+        for (uint16_t i = 0; i < k; i++){  // La modificacion consistio en añadir este bucle for
+            vecina = GetVecinaRandom(actual, k);
+            vecina = Greedy(vecina);
+        }
         if (vecina->Objetivo() < actual->Objetivo()){
             actual = vecina;
             k = 1;
